@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="">
+    
+    <header>
+        <div class="border-b-2 border-blue-800 h-20 ">
+            
+          <nav id="navegacion" class="bg-blue-300 h-[78px] right-0 left-0 ">
+          </nav>
+        </div>    
+    </header>
+
+    <!--log movil-->
+    <div class="md:hidden">
+           <img src="/img/Moving forward-cuate.png" alt="">
+
+        <div class="gap-4 h-screen flex max-w-7xl mx-auto justify-center items-center px-4 -mt-[500px] w-full ">
+            <img src="/img/login-mujer.png" alt="" class="h-[300px] -mr-9 z-40 -mb-14">
+            <form id="formulario" class="flex flex-col gap-4 bg-blue-300 p-4 rounded-lg text-lg shadow-xl lg:w-2/4">
+
+                <div class="flex flex-col gap-2">
+                    <label for="correo-input" class="font-bold">Correo <span class="text-white">*</span></label>
+                    <input type="email" name="correo-input" id="correo-input" autocomplete="off"
+                        placeholder="Correo electronico" class="rounded-lg p-2 focus:outline-blue-700">
+                    <p class="text-xs"></p>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <label for="password" class="font-bold">Password <span class="text-white">*</span></label>
+                    <input type="password" name="password-input" id="password-input"
+                        class="rounded-lg p-2 focus:outline-blue-700">
+                    <p class="text-xs" id="error-text"></p>
+                </div>
+
+                
+
+                <button id="form-btn" 
+                    class="bg-blue-950 px-4 rounded-lg text-white hover:bg-blue-400 py-2 font-bold transition ease-in-out disabled:opacity-40 disabled:cursor-not-allowed z-30">Iniciar sesion</button>
+
+            </form>
+            <img src="/img/login-hombre.png" alt="" class="h-[350px] -ml-9">
+
+            <div class="hidden md:flex w-2/5 items-center">
+                <img src="/images/registro.svg" alt="" class="">
+            </div>
+
+        </div> 
+    </div>
+    
+    <!--log pc-->
+    
+    <div class="pt-16 gap-4 h-screen flex max-w-7xl mx-auto justify-center flex-row-reverse items-center px-4 max-md:hidden z-50 ">
+        <form id="formulario" class="flex flex-col gap-4 bg-blue-300 p-4 rounded-lg text-lg shadow-xl lg:w-2/4">
+
+            <div class="flex flex-col gap-2">
+                <label for="correo-input" class="font-bold">Correo <span class="text-white">*</span></label>
+                <input type="email" name="correo-input" id="correo-input" autocomplete="off"
+                    placeholder="Correo electronico" class="rounded-lg p-2 focus:outline-blue-700">
+                <p class="text-xs"></p>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <label for="password" class="font-bold">Password <span class="text-white">*</span></label>
+                <input type="password" name="password-input" id="password-input"
+                    class="rounded-lg p-2 focus:outline-blue-700">
+                <p class="text-xs" id="error-text"></p>
+            </div>
+
+            
+
+            <button id="form-btn"  
+                class="bg-blue-950 px-4 rounded-lg text-white hover:bg-blue-400 py-2 font-bold transition ease-in-out disabled:opacity-40 disabled:cursor-not-allowed">Iniciar sesion</button>
+
+        </form>
+        <div class="hidden md:flex w-2/5 items-center">
+            <img src="/img/undraw_fingerprint_login_re_t71l.svg" alt="" class="scale-100">
+        </div>
+
+    </div>
+
+    <footer
+        class="flex flex-col items-center bg-neutral-900 text-center text-white font-overpass ">
+        <div class="container px-6 pt-6">
+                    
+              <div>
+                <div class="md:mb-6 md:ml-auto">
+                  <p class="">
+                    <strong>Tu Lo sueñas, Nosotros te llevamos!!</strong>
+                  </p>
+                </div>
+        <!-- Copyright section -->
+        <div
+          class="w-full p-4 text-center"
+          style="background-color: rgba(0, 0, 0, 0.2)">
+          © 2023 Copyright:
+          <a class="text-white" href="https://tw-elements.com/">Malvis Travel's CA</a>
+        </div>
+    </footer>
+</body>
+<script src="../componentes/nav.js"></script>
+<script src="../login/login.js"></script>
+
+</html>

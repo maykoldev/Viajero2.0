@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-blue-200 text-blue-950">
+    <header>
+        <div class="border-b-2 border-blue-800 h-20 ">
+            
+          <nav id="navegacion" class="bg-blue-300 h-[78px] right-0 left-0 ">
+          </nav>
+        </div>    
+    </header>
+
+    <div class="max-md:hidden ">
+      <div>
+        <img src="/img/background1.png" alt="" class="w-full">
+      </div>
+    </div>
+    <!--buscador pc-->
+    <section class="max-md:hidden ">
+      
+      <div class="flex flex-col md:flex-col items-center ">
+        
+        <div class="relative flex justify-center w-[90%] my-4 md:animate-rotate-x md:animate-once md:animate-ease-linear md:animate-reverse md:animate-fill-forwards">
+          <form class=" flex flex-col gap-6 md:flex-row md:justify-center items-center md:border-2 md:border-blue-950 md:w-[70%] font-overpass font-semibold   w-[80%] py-4 md:rounded-xl md:-mt-16">
+            
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+              <label for="origen">Origen</label>
+              <select name="origen" id="origen" class="h-11 w-[90%] m-auto cursor-pointer">
+                <option >Seleccione</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+              <label for="destino">Destino</label>
+              <select name="destino" id="destino" class="h-11 w-[90%] m-auto cursor-pointer">
+                <option >Seleccione</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+              <label for="fecha">Fecha de ida</label>
+              <select name="fecha" id="fecha" class="h-11 w-[90%] m-auto cursor-pointer">
+                <option >Seleccione</option>
+              </select>
+            </div>
+
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+              <label for="fechaV">Fecha de vuelta </label>
+              <select name="fechaV" id="fechaV"  class="h-11 w-[90%] m-auto cursor-pointer">
+                <option >Seleccione</option>
+              </select>
+            </div>
+
+            <div>
+              <button id="buscar-ruta" class="w-16 boton border-blue-100 text-blue-950 hover:bg-blue-100 hover:border-blue-950 hover:text-blue-800 ">Buscar</button>
+            </div>
+            
+          </form>
+          
+        </div>
+        
+      </div>
+    </section>
+    <!--rutas popilares-->
+    <section class="max-md:hidden flex flex-col justify-center items-center">
+      <div class="my-6 w-[90%]">
+        <div class="text-center">
+          <h2 class="font-overpass font-extrabold text-4xl text-blue-950 my-4 ">Rutas Populares</h2>
+        </div>
+        
+        <div class="font-overpass flex flex-col gap-4 justify-center items-center">
+          <div><a href="#">Caracas - San Cristobal </a></div>
+          <div><a href="#">Caracas - Maracaibo</a></div>
+          <div><a href="#">Caracas - Trujillo</a></div>
+          <div><a href="#">Caracas - Ciudad Bolivar</a></div>
+          <div><a href="#">Caracas - San Cristobal</a></div>
+          <div><a href="#">Caracas - San Cristobal</a></div>
+          <div><a href="#">Caracas - San Cristobal</a></div>
+          <div><a href="#">Caracas - San Cristobal</a></div>
+          <div><a href="#">Caracas - San Cristobal</a></div>
+          <div><a href="#">Caracas - San Cristobal</a></div>
+        </div>
+      </div> 
+    </section>
+    
+    <!--Empresas aliadas-->
+    <section class="max-md:hidden flex w-[80%] m-auto justify-center ">
+      <div class="w-full my-6 flex flex-col justify-center items-center"><!-- /.container -->
+        <div class="text-center ">
+          <h2 class="font-overpass font-extrabold text-4xl text-blue-950">Empresas Aliadas</h2>
+        </div>
+        <div class="w-2/4 my-6 ">
+          <img src="/img/empresas.png" alt="">
+        </div>
+        
+      </div>
+    </section>
+    
+    <!--buscador movil-->
+    <section class="my-8 md:hidden">
+        <div class="flex flex-col justify-center items-center gap-4">
+            <div class="font-bold text-xl">
+            <h1>A donde quieres Viajar?</h1>
+            </div>
+            <div class="w-[80%] md:w-[60%]">
+                <form action="" class=" flex flex-col gap-4 justify-center items-center md:flex-row">
+                    <div class="w-3/5 border-2 border-blue-300 hover:bg-blue-500 hover:opacity-30 rounded-xl py-2 px-4 flex flex-col justify-center items-center font-bold">
+                        <label for="origen">Origen</label>
+                        <select name="origen" id="origen" class="h-11 w-[90%] m-auto cursor-pointer rounded-lg">
+                          <option >Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="w-3/5 border-2 border-blue-300 hover:bg-blue-500 hover:opacity-30 rounded-xl py-2 px-4 flex flex-col justify-center items-center font-bold">
+                        <label for="destino">Destino</label>
+                        <select name="destino" id="destino" class="h-11 w-[90%] m-auto cursor-pointer rounded-lg">
+                          <option >Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="w-3/5 border-2 border-blue-300 hover:bg-blue-500 hover:opacity-30 rounded-xl py-2 px-4 flex flex-col justify-center items-center font-bold">
+                        <label for="fecha">Fecha de ida</label>
+                        <div class=" w-[90%] m-auto rounded-lg">
+                          <input type="date" id="fecha" name="fecha" class="w-full rounded-lg h-11">
+                      </div>
+                    </div>
+
+                    <div class="flex justify-center items-center w-16 h-16 border-2 border-blue-300 rounded-full py-4 px-4 cursor-pointer hover:bg-blue-300 md:rounded-lg">
+                      
+                      <button id="buscar-ruta"><img src="/img/arrow.png" alt="" class="w-8 h-8 z-50"></button>
+                  </div>
+                </form>
+                  
+            </div>
+        </div>
+        
+
+    </section>
+    <section class="my-4">
+      <div class="flex flex-col gap-6">
+        <div class="text-center font-bold"><h2 class="font-extrabold text-4xl max-md:text-xl text-blue-950">Metodos de pago</h2></div>
+        <div class="flex justify-center">
+          <img src="/img/paypal-seeklogo.com.svg" alt="" class="w-28">
+         <img src="/img/792983_12584-NP0BCH.svg" alt="" class="w-28">
+        </div>
+       
+        
+      </div>
+    </section>
+    <footer
+        class="flex flex-col items-center bg-neutral-900 text-center text-white font-overpass">
+        <div class="container px-6 pt-6">
+          <!-- iconos de bluees -->
+          <div class="mb-6 flex justify-center">
+            <a
+              href="#!"
+              type="button"
+              class="m-1 h-9 w-9 rounded-full border-2 border-white uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0"
+              data-te-ripple-init
+              data-te-ripple-color="light">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mx-auto h-full w-4"
+                fill="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+              </svg>
+            </a>
+
+            <a
+              href="#!"
+              type="button"
+              class="m-1 h-9 w-9 rounded-full border-2 border-white uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0"
+              data-te-ripple-init
+              data-te-ripple-color="light">
+              <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              class="mx-auto h-full w-4"
+              fill="currentColor"
+              viewBox="0 0 50 50">
+                <path d="M 5.9199219 6 L 20.582031 27.375 L 6.2304688 44 L 9.4101562 44 L 21.986328 29.421875 L 31.986328 44 L 44 44 L 28.681641 21.669922 L 42.199219 6 L 39.029297 6 L 27.275391 19.617188 L 17.933594 6 L 5.9199219 6 z M 9.7167969 8 L 16.880859 8 L 40.203125 42 L 33.039062 42 L 9.7167969 8 z"></path>
+                </svg>
+            </a>
+
+            <a
+              href="#!"
+              type="button"
+              class="m-1 h-9 w-9 rounded-full border-2 border-white uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0"
+              data-te-ripple-init
+              data-te-ripple-color="light">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mx-auto h-full w-4"
+                fill="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  d="M7 11v2.4h3.97c-.16 1.029-1.2 3.02-3.97 3.02-2.39 0-4.34-1.979-4.34-4.42 0-2.44 1.95-4.42 4.34-4.42 1.36 0 2.27.58 2.79 1.08l1.9-1.83c-1.22-1.14-2.8-1.83-4.69-1.83-3.87 0-7 3.13-7 7s3.13 7 7 7c4.04 0 6.721-2.84 6.721-6.84 0-.46-.051-.81-.111-1.16h-6.61zm0 0 17 2h-3v3h-2v-3h-3v-2h3v-3h2v3h3v2z"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+
+            <a
+              href="#!"
+              type="button"
+              class="m-1 h-9 w-9 rounded-full border-2 border-white uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0"
+              data-te-ripple-init
+              data-te-ripple-color="light">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="mx-auto h-full w-4"
+                fill="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+              </svg>
+            </a>
+        
+          </div>
+
+          <div>
+            
+              <div>
+                <div class="md:mb-6 md:ml-auto">
+                  <p class="">
+                    <strong>Tu Lo sueñas, Nosotros te llevamos!!</strong>
+                  </p>
+                </div>
+        <!-- Copyright section -->
+        <div
+          class="w-full p-4 text-center"
+          style="background-color: rgba(0, 0, 0, 0.2)">
+          © 2023 Copyright:
+          <a class="text-white" href="https://tw-elements.com/">Malvis Travel's CA</a>
+        </div>
+    </footer>
+    <script src="../componentes/nav.js"></script>
+    <script src="./index.js"></script>
+</body>
+
+</html>
