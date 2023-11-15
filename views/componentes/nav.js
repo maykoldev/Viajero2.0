@@ -140,6 +140,34 @@ const crearNavSeat = () => {
     `
     
 }
+const crearNavRes = () => {
+    navegacion.innerHTML = `
+    <div class="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto">
+            <a href="/" class="w-32"><img src="/img/LOGO2.png" alt="" class="w-32 pt-3"></a> 
+            <svg xmlns="http://www.w3.org/2000/svg"
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke-width="1.5" 
+            stroke="currentColor" 
+            class="w-10 h-10 text-white cursor-pointer p-2 hover:bg-blue-500 rounded-lg md:hidden z-50">
+
+             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+
+                <!--menu pc-->
+                <div class="hidden md:flex " >
+                    <a href="/login" class=" text-white font-bold hover:bg-blue-400 py-2 px-4 rounded-lg transition ease-in-out w-full">Login</a>
+                </div>
+
+                <!--menu movil-->
+                <div class="z-40 bg-blue-700 fixed top-0 right-0 left-[50%] bottom-0 flex-col justify-start pt-12 items-center gap-4 hidden" >
+
+                    <a href="/login" class=" text-white font-bold hover:bg-blue-400 py-2 px-4 rounded-lg transition ease-in-out w-full">Login</a>
+                </div>
+        </div>
+    `
+    
+}
 
 //agregar la ruta para los componentes
 if(window.location.pathname === '/'){
@@ -148,10 +176,12 @@ if(window.location.pathname === '/'){
     crearNavLogin();
 }else if(window.location.pathname ==='/registro/'){
     crearNavReg();
-}else if(window.location.pathname ==='/admon'){
+}else if(window.location.pathname ==='/admon/'){
     crearNavAdm();  
-}else if(window.location.pathname ==='/seat'){
+}else if(window.location.pathname ==='/seat/'){
     crearNavSeat();
+}else if(window.location.pathname ==='/res/'){
+    crearNavRes();
 }
 const navBtn = navegacion.children[0].children[1]
 //console.log(navBtn);

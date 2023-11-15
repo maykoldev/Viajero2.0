@@ -4,6 +4,7 @@ const destinoSelect = document.getElementById('destino');
 const fechaInput = document.getElementById('fecha');
 const buscarBtn = document.getElementById('buscar-ruta');
 
+
 // Cargar opciones en los select input desde un JSON
 /*fetch('opciones.json')
   .then(response => response.json())
