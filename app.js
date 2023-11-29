@@ -1,8 +1,10 @@
 require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
+const usersRouter = require('./controllers/users');
 /*const cors = require('cors');
 const cookieParser = require ('cookie-parser');
 const morgan = require ('morgan');
@@ -32,11 +34,13 @@ app.use('/seat', express.static(path.resolve('views', 'bus')))
 
 //IMPORTANTE
 app.use(express.json());
+
 /*app.use(cors());
 app.use(cookieParser());
-app.use(morgan('tiny'));
+app.use(morgan('tiny'));*/
 
 
 //rutas backend
-app.use('/api/users',usersRouter)*/
+app.use('/api/users', usersRouter);
+
 module.exports=app;
