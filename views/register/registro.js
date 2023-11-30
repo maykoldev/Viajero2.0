@@ -92,7 +92,7 @@ formulario.addEventListener('submit', async e=>{
        // console.log(newUser)
     }catch(error){
         console.log(error)
-        createNotification(true,error.response.data.error)
+        //createNotification(true,error.response.data.error)
         
     }
     
