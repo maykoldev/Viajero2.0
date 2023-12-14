@@ -1,4 +1,4 @@
-const asientos = document.getElementsByClassName('bg-puestos');
+const asientos = document.getElementsByClassName('asientos');
 const asientosSeleccionados = document.getElementById('asientos-seleccionados');
 
 
@@ -16,7 +16,7 @@ Array.from(asientos).forEach(asiento => {
         return;
       }
      
-      this.classList.add('bg-orange-500','uppercase');
+      this.classList.add('bg-orange-500','text-blue-700');
       asientosSeleccionados.innerHTML += this.id + ' ';
     }
   };
@@ -31,3 +31,12 @@ asientosSeleccionados.onclick = function() {
   
   asientosSeleccionados.innerHTML = '';
 };
+
+//funcion de los botones
+const botones = document.querySelectorAll('button');
+
+botones.forEach(boton => {
+  boton.addEventListener('click', () => {
+    window.location.href = 'pagina-de-pago.html';
+  });
+});

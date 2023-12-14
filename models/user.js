@@ -10,7 +10,8 @@ const userSchema = new mongoose.Schema({
     verified:{
         type:Boolean,
         default:false
-    }    
+    },   
+    verificationCode:String //almacena el codigo de verificacion
 })
 
 // confg respuesta del usuario en el schema
@@ -25,5 +26,6 @@ userSchema.set('toJSON',{
 
 //damos el nombre, registrar el modelo, que datos tiene ese modelo
 const User = mongoose.model('User',userSchema);
+
 
 module.exports = User;

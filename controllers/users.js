@@ -1,37 +1,86 @@
 const usersRouter = require('express').Router();
 const User = require('../models/user');
+const nodemailer = require('nodemailer');
+const { v4: uuidv4 } = require('uuid'); // Importa la función uuidv4 desde el paquete uuid
 
-usersRouter.post('/', (request, response) => {
+usersRouter.post('/', async (request, response) => {
   const { name, email, password } = request.body;
 
   const newUser = new User({
     name,
     email,
-    password
+    password,
   });
 
-  newUser.save()
-    .then(savedUser => {
-      // El usuario se ha guardado correctamente en la base de datos
-      // Enviamos un correo de confirmación al usuario
-      const emailOptions = {
-        from: 'no-reply@example.com',
-        to: savedUser.email,
-        subject: 'Confirmación de registro',
-        text: `
-          Gracias por registrarte en nuestra aplicación.
-          Para confirmar tu registro, haz clic en el siguiente enlace:
-          ${process.env.APP_URL}/confirm/${savedUser._id}`
-      };
+  try {
+    const savedUser = await newUser.save();
 
-      mail.sendEmail(emailOptions);
-
-      response.status(201).json(savedUser);
-    })
-    .catch(error => {
-      // Ocurrió un error al guardar el usuario
-      response.status(500).json({ error: 'Error al guardar el usuario en la base de datos' });
+    // Configurar el transporte de nodemailer
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'maykoldiaz009@gmail.com',
+        pass: '',//////////ACA LAS CREDENCIALES
+      },
+      debug: true,
     });
+
+    // Generar un código único utilizando uuidv4
+    const verificationCode = uuidv4();
+    console.log('codigo', verificationCode);
+
+    // Guardar el código de verificación en la base de datos
+    savedUser.verificationCode = verificationCode;
+    await savedUser.save();
+
+    // Configurar el correo de verificación
+    const emailOptions = {
+      from: 'no-reply@example.com',
+      to: savedUser.email,
+      subject: 'Confirmación de registro',
+      text: `
+        Gracias por registrarte en nuestra aplicación.
+        Para confirmar tu registro, haz clic en el siguiente enlace:
+        ${process.env.APP_URL}/confirmar/${verificationCode}`,
+    };
+
+    // Enviar el correo de verificación
+    transport.sendMail(emailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('Correo de verificación enviado: ' + info.response);
+      }
+    });
+
+    response.status(201).json(savedUser);
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Error al guardar el usuario en la base de datos' });
+  }
+});
+
+usersRouter.get('/confirmar/:confirmationCode', async (request, response) => {
+  const confirmationCode = request.params.confirmationCode;
+
+  try {
+    const user = await User.findOne({ verificationCode: confirmationCode });
+
+    if (!user) {
+      response.status(404).json({ error: 'Código de confirmación no válido' });
+      return;
+    }
+
+    // Marcar al usuario como verificado en tu base de datos
+    user.verified = true;
+    await user.save();
+
+    // Redirigir al usuario a la vista de login
+    response.redirect('/confirmar');
+  } catch (error) {
+    console.error(error);
+    response.status(500).json({ error: 'Error al procesar la confirmación' });
+  }
 });
 
 usersRouter.post('/login', async (request, response) => {
@@ -56,7 +105,7 @@ usersRouter.post('/login', async (request, response) => {
     response.status(200).json(user);
   } catch (error) {
     // Ocurrió un error al buscar el usuario
-    response.status(500).json({ error: 'Error al buscar el usuario en la base de datos' });
+    response.status(404).json({ error: 'Error al buscar el usuario en la base de datos' });
   }
 });
 

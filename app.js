@@ -12,6 +12,7 @@ const morgan = require ('morgan');
     try {
         await mongoose.connect(process.env.MONGO_URI_TEST);
         console.log('Te has conectado a MongoDB');
+        mongoose.set('debug', true)
     } catch (error) {
         console.log(error);
     }
@@ -26,6 +27,9 @@ app.use('/img', express.static(path.resolve('img')));
 app.use('/admon', express.static(path.resolve('views', 'adminPanel')));
 app.use('/res', express.static(path.resolve('views', 'resultado')));
 app.use('/seat', express.static(path.resolve('views', 'bus')));
+app.use('/proveedor', express.static(path.resolve('views', 'proveedores')));
+app.use('/nuevoProveedor', express.static(path.resolve('views', 'N-Proveedores')));
+app.use('/confirmar', express.static(path.resolve('views', 'confirmacion')));
 
 // IMPORTANTE
 app.use(express.json());
