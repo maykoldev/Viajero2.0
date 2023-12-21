@@ -1,104 +1,131 @@
-import { obtenerProductos, eliminarProducto} from "./api.js";//de esta manera importamos desde nuestra api
-const listado = document.querySelector('#listado-Productos');
 const userMenuDiv = document.getElementById("userMenu");
 const userMenu = document.getElementById("userButton");
 const navMenuDiv = document.getElementById("nav-content");
 const navMenu = document.getElementById("nav-toggle");
+const agregarProveedor = document.getElementById("agregarP");
+const modalAgregarProveedor = document.getElementById("modalAgregarProveedor");
+const formulario = document.getElementById("formAgregarProveedor");
+const razonS = document.getElementById("razonSocial");
+const rif = document.getElementById("rif");
+const telefono = document.getElementById("telefono");
+const correo = document.getElementById("correo");
+const ganancia = document.getElementById("porcentaje");
+const guardar = document.getElementById("guardarP");
+const cerrarForm = document.getElementById("cerrarF");
 
 document.onclick = check;
 
-function check(e){
-  
-  const target = (e && e.target) || (event && event.srcElement);
+function check(e) {
+  const target = e && e.target;
 
-  //User Menu
-  if (!checkParent(target, userMenuDiv)) {
-    // click NOT on the menu
-    if (checkParent(target, userMenu)) {
-      // click on the link
-      if (userMenuDiv.classList.contains("invisible")) {
-        userMenuDiv.classList.remove("invisible");
-      } else {userMenuDiv.classList.add("invisible");}
-    } else {
-      // click both outside link and outside menu, hide menu
-      userMenuDiv.classList.add("invisible");
-    }
+  // User Menu
+  if (!checkParent(target, userMenuDiv) && checkParent(target, userMenu)) {
+    toggleVisibility(userMenuDiv);
+  } else {
+    userMenuDiv.classList.add("invisible");
   }
-  
-  //Nav Menu
-  if (!checkParent(target, navMenuDiv)) {
-    // click NOT on the menu
-    if (checkParent(target, navMenu)) {
-      // click on the link
-      if (navMenuDiv.classList.contains("hidden")) {
-        navMenuDiv.classList.remove("hidden");
-      } else {navMenuDiv.classList.add("hidden");}
-    } else {
-      // click both outside link and outside menu, hide menu
-      navMenuDiv.classList.add("hidden");
-    }
+
+  // Nav Menu
+  if (!checkParent(target, navMenuDiv) && checkParent(target, navMenu)) {
+    toggleVisibility(navMenuDiv);
+  } else {
+    navMenuDiv.classList.add("hidden");
   }
-  
+}
+
+function toggleVisibility(element) {
+  if (element.classList.contains("invisible")) {
+    element.classList.remove("invisible");
+  } else {
+    element.classList.add("invisible");
+  }
 }
 
 function checkParent(t, elm) {
-  while(t.parentNode) {
-    if( t == elm ) {return true;}
+  while (t.parentNode) {
+    if (t == elm) {
+      return true;
+    }
     t = t.parentNode;
   }
   return false;
 }
 
+agregarProveedor.addEventListener("click", (e) => {
+  e.stopPropagation();
+  toggleVisibility(modalAgregarProveedor);
+});
 
+cerrarForm.addEventListener("click", () => {
+  modalAgregarProveedor.classList.add("hidden");
+});
 
-document.addEventListener('DOMContentLoaded', mostrarProductos);
-listado.addEventListener('click', confirmarEliminar)
+guardar.addEventListener("click", async () => {
+  const razonSocialValue = razonS.value;
+  const rifValue = rif.value;
+  const telefonoValue = telefono.value;
+  const correoValue = correo.value;
+  const gananciaValue = ganancia.value;
 
-async function mostrarProductos(){
-    //para onsultar este elemento debemos usar el async
-    const productos = await obtenerProductos();
-    console.log(productos);
+  const rifRegex = /^[VEJPG]-\d{8}-\d$/;
+  const telefonoRegex = /^[4][0-9]{9}$/;
+  const emailRegex =
+    /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
 
-    productos.forEach(i=>{
-        const {nombre, precio, categoria, id}=i;
-        const row = document.createElement('tr');
+  if (
+    !razonSocialValue ||
+    !rifValue ||
+    !telefonoValue ||
+    !correoValue ||
+    !gananciaValue
+  ) {
+    showAlert("Completa todos los campos antes de agregar al proveedor.");
+    return;
+  }
 
-        row.innerHTML +=`
-        <td class="py-4 px-6 border-b border-gray-200 whitespace-no-wrap">
-        <p class="text-gray-700  text-lg font-bold text-ms leading-5 ">${nombre}</p>
-        </td>
+  if (!emailRegex.test(correoValue)) {
+    showAlert("Formato de correo inválido.");
+    return;
+  }
 
-        <td class="py-4 px-6 border-b border-gray-200 whitespace-no-wrap">
-        <p class="text-gray-700  text-lg font-bold text-ms leading-5 ">${precio}</p>
-        </td>
+  if (!rifRegex.test(rifValue)) {
+    showAlert("Formato de RIF no válido. Debe tener el formato correcto.");
+    return;
+  }
 
-        <td class="py-4 px-6 border-b border-gray-200 whitespace-no-wrap">
-                <p class="text-gray-700  text-lg font-bold text-ms leading-5 ">${categoria}</p>
-            </td>
+  if (!telefonoRegex.test(telefonoValue)) {
+    showAlert(
+      "Formato de número de teléfono no válido. Debe ser un número venezolano."
+    );
+    return;
+  }
 
-        <td class="py-4 px-6 border-b border-gray-200 whitespace-no-wrap">
-            <a href="editar-producto.html?id=${id}" class="text-teal-600 mr-5 hover:text-teal-900">Editar<a/>
-            <a href="#"data-producto="${id}" class="text-red-600 hover:text-red-900 eliminar ">Eliminar<a/>
-        </td>
-    
-    
-    `
+  try {
+    const response = await fetch("/api/proveedores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        razonSocial: razonSocialValue,
+        rif: rifValue,
+        telefono: telefonoValue,
+        correo: correoValue,
+        porcentajeGanancia: gananciaValue,
+      }),
+    });
 
-    listado.appendChild(row)
-    })
-
-}
-
-async function confirmarEliminar(e){
-    if(e.target.classList.contains('eliminar')){
-        const productoId = parseInt (e.target.dataset.producto);
-        console.log(productoId)
-
-        const confirmar = confirm('Quieres eliminar este producto?');
-
-        if (confirmar){
-            await eliminarProducto(productoId);
-        }
+    if (response.ok) {
+      modalAgregarProveedor.classList.add("hidden");
+    } else {
+      showAlert("Error al agregar el proveedor.");
     }
-}
+  } catch (error) {
+    console.error("Error:", error);
+    showAlert("Error al procesar la solicitud.");
+  }
+});
 
+function showAlert(message) {
+  alert(message);
+}

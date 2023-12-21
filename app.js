@@ -1,21 +1,24 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config();
+
 const cors = require('cors');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
 const usersRouter = require('./controllers/users');
-const cookieParser = require ('cookie-parser');
-const morgan = require ('morgan');
+const proveedoresRouter = require('./controllers/proveedores');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
 
 (async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI_TEST);
-        console.log('Te has conectado a MongoDB');
-        mongoose.set('debug', true)
-    } catch (error) {
-        console.log(error);
-    }
+  try {
+    await mongoose.connect(process.env.MONGO_URI_TEST);
+    console.log('Te has conectado a MongoDB');
+    mongoose.set('debug', true);
+  } catch (error) {
+    console.log(error);
+  }
 })();
 
 // Rutas frontend
@@ -28,7 +31,6 @@ app.use('/admon', express.static(path.resolve('views', 'adminPanel')));
 app.use('/res', express.static(path.resolve('views', 'resultado')));
 app.use('/seat', express.static(path.resolve('views', 'bus')));
 app.use('/proveedor', express.static(path.resolve('views', 'proveedores')));
-app.use('/nuevoProveedor', express.static(path.resolve('views', 'N-Proveedores')));
 app.use('/confirmar', express.static(path.resolve('views', 'confirmacion')));
 
 // IMPORTANTE
@@ -39,5 +41,6 @@ app.use(morgan('tiny'));
 
 // Rutas backend
 app.use('/api/users', usersRouter);
+app.use('/api/proveedores', proveedoresRouter);
 
 module.exports = app;

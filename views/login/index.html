@@ -34,8 +34,8 @@
 
                 <div class="flex flex-col gap-2">
                     <label for="password-input" class="font-bold">Password <span class="text-white">*</span></label>
-                    <input type="password" name="password-input" id="password-input"
-                        class="rounded-lg p-2 focus:outline-blue-700">
+                    <input type="password" name="password-input" id="password-input" autocomplete="current-password"
+                        class="rounded-lg p-2 focus:outline-blue-700"> 
                     <p class="text-xs" id="error-text"></p>
                 </div>
 
@@ -65,7 +65,7 @@
 
             <div class="flex flex-col gap-2">
                 <label for="password" class="font-bold">Password <span class="text-white">*</span></label>
-                <input type="password" name="password-input" id="password-log"
+                <input type="password" name="password-input" id="password-log" autocomplete="current-password">
                     class="rounded-lg p-2 focus:outline-blue-700">
                 <p class="text-xs" id="error-text"></p>
             </div>
@@ -102,6 +102,6 @@
     </footer>
 </body>
 <script src="../componentes/nav.js"></script>
-<script src="../login/login.js"></script>
+<script src="./login.js"></script>
 
 </html>

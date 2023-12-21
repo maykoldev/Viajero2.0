@@ -83,17 +83,45 @@ formulario.addEventListener('submit', async e=>{
             
         }
         console.log(newUser);
-        formulario.reset();
+        
 
         const response = await axios.post('/api/users', newUser)//ALIAS(/api/users) //debo indicarle la ruta a nivel de backend
         console.log(response)
+        window.location.href = '/login';
+        // Restablecer el estilo del campo de correo electrónico
+        emailInput.classList.remove('focus:outline-red-700', 'outline-4');
+        emailInput.classList.remove('focus:outline-red-900', 'outline-4');
+        emailInput.classList.remove('focus:outline-green-700', 'outline-4');
         createNotification(false,response.data.msg);
 
        // console.log(newUser)
     }catch(error){
         console.log(error)
-        //createNotification(true,error.response.data.error)
-        
+        // Marcar el campo de correo electrónico en rojo
+        emailInput.classList.remove('focus:outline-green-700', 'outline-4');
+        emailInput.classList.remove('focus:outline-red-900', 'outline-4');
+        emailInput.classList.add('focus:outline-red-700', 'outline-4');
+
+        // Mostrar una alerta debajo del campo de correo electrónico
+        const errorAlert = document.createElement('p');
+        errorAlert.className = 'text-red-700 text-xs';
+        errorAlert.textContent = error.response.data.error;
+
+        const parentDiv = emailInput.parentElement;
+        parentDiv.appendChild(errorAlert);
+
+        // Agregar un evento para eliminar la alerta cuando se modifique el correo
+        emailInput.addEventListener('input', () => {
+            emailInput.classList.remove('focus:outline-red-700', 'outline-4');
+            emailInput.classList.remove('focus:outline-red-900', 'outline-4');
+            emailInput.classList.add('focus:outline-green-700', 'outline-4');
+            if (parentDiv.contains(errorAlert)) {
+                parentDiv.removeChild(errorAlert);
+            }
+        });
+
+        // Notificación de error
+        createNotification(true, error.response.data.error);
     }
-    
+  
 })
