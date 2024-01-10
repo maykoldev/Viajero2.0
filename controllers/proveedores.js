@@ -1,5 +1,5 @@
-const proveedoresRouter = require('express').Router(); // Asegúrate de tener el enrutador de proveedores
-const Proveedor = require('../models/proveedor'); // Asegúrate de tener el modelo de proveedor
+const proveedoresRouter = require('express').Router(); 
+const Proveedor = require('../models/proveedor'); 
 
 proveedoresRouter.post('/', async (request, response) => {
   const { razonSocial, rif, telefono, correo, porcentajeGanancia } = request.body;
@@ -30,6 +30,7 @@ proveedoresRouter.post('/', async (request, response) => {
     response.status(500).json({ error: 'Error al guardar el proveedor en la base de datos' });
   }
 });
+
 
 module.exports = proveedoresRouter;
 

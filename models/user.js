@@ -1,29 +1,34 @@
-// Importar la biblioteca de mongoose para la conexión y definición del modelo
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 // Definir el esquema (schema) de la base de datos para los usuarios
 const userSchema = new mongoose.Schema({
-    name: String,                   // Nombre del usuario
-    email: String,                  // Correo electrónico del usuario
-    password: String,               // Contraseña del usuario
+    userId: {
+        type: String,
+        default: uuidv4, // Generar un ID único usando uuidv4 como valor predeterminado
+        unique: true,
+    },
+    name: String,
+    email: String,
+    password: String,
     isAdmin: {
         type: Boolean,
-        default: false               // Valor predeterminado para la verificación del usuario
+        default: false,
     },
     verified: {
         type: Boolean,
-        default: false               // Valor predeterminado para la verificación del usuario
+        default: false,
     },
-    verificationCode: String        // Código de verificación almacenado temporalmente
+    verificationCode: String,
 });
 
 // Configurar la transformación de la respuesta del usuario al formato deseado
 userSchema.set('toJSON', {
     transform: (document, returnObject) => {
         returnObject.id = returnObject._id.toString();
-        delete returnObject._id;    // Eliminar la propiedad _id
-        delete returnObject.__v;    // Eliminar la versión interna de mongoose (__v)
-        delete returnObject.password; // Eliminar la contraseña para seguridad
+        delete returnObject._id;
+        delete returnObject.__v;
+        delete returnObject.password;
     }
 });
 
@@ -32,3 +37,4 @@ const User = mongoose.model('User', userSchema);
 
 // Exportar el modelo para su uso en otras partes de la aplicación
 module.exports = User;
+

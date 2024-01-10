@@ -1,8 +1,11 @@
 const usersRouter = require('express').Router();
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
+
+dotenv.config();
 
 // Ruta de registro de usuario
 usersRouter.post('/', async (request, response) => {
@@ -21,21 +24,21 @@ usersRouter.post('/', async (request, response) => {
     const newUser = new User({
       name,
       email,
-      password,
+      password: await bcrypt.hash(password, 10),
     });
 
     const savedUser = await newUser.save();
 
     // Configurar el transporte de nodemailer
-    const transport = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      },
-      debug: true,
-    });
-    
+  const transport = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+    debug: true,
+  });
+
 
     // Generar un código único utilizando uuidv4
     const verificationCode = uuidv4();
@@ -98,36 +101,55 @@ usersRouter.get('/confirmar/:confirmationCode', async (request, response) => {
   }
 });
 
-// Ruta de inicio de sesión (tanto para usuarios normales como para el administrador)
-// Ruta de inicio de sesión (tanto para usuarios normales como para el administrador)
+// Ruta de inicio de sesión para usuarios normales
 usersRouter.post('/login', async (request, response) => {
-  const { email, password } = request.body;
-
   try {
+    const { email, password } = request.body;
     const user = await User.findOne({ email });
 
     if (!user) {
-      // El usuario no existe
-      response.status(404).json({ error: 'El usuario no existe' });
-      return;
+      return response.status(404).json({ error: 'El usuario no existe' });
     }
 
-    // Verificar si el usuario es administrador
-    const isAdmin = user.email === 'admin@example.com'; // Cambiar a la lógica de administrador que prefieras
+    // Verificar la contraseña utilizando bcrypt
+    const passwordMatch = await bcrypt.compare(password, user.password);
 
-    // Verificar las credenciales (tanto para usuarios normales como para el administrador)
-    if ((isAdmin && password === 'Admin123') || (!isAdmin && user.password === password)) {
-      // Credenciales válidas
-      response.status(200).json({ user, isAdmin });
+    if (passwordMatch) {
+      return response.status(200).json({ user });
     } else {
-      // Credenciales incorrectas
-      response.status(401).json({ error: 'Credenciales incorrectas' });
+      return response.status(401).json({ error: 'Credenciales incorrectas' });
     }
   } catch (error) {
-    // Ocurrió un error al buscar el usuario
-    response.status(404).json({ error: 'Error al buscar el usuario en la base de datos' });
+    return response.status(500).json({ error: 'Error al buscar el usuario en la base de datos' });
+  }
+});
+
+// Ruta de inicio de sesión para el administrador
+usersRouter.post('/admon/login', async (request, response) => {
+  try {
+    const { email, password } = request.body;
+
+    if (email !== process.env.ADMIN_EMAIL) {
+      console.log('Credenciales incorrectas para el administrador:', email);
+      return response.status(401).json({ error: 'Credenciales incorrectas para el administrador' });
+    }
+
+    // Verificar la contraseña del administrador
+    const adminPasswordMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
+
+    if (adminPasswordMatch) {
+      console.log('Inicio de sesión exitoso para el administrador:', email);
+      return response.status(200).json({ isAdmin: true, redirectTo: '/admin-home' });
+    } else {
+      console.log('Credenciales incorrectas para el administrador:', email);
+      return response.status(401).json({ error: 'Credenciales incorrectas para el administrador' });
+    }
+  } catch (error) {
+    console.error('Error al procesar la solicitud:', error);
+    return response.status(500).json({ error: 'Error al procesar la solicitud' });
   }
 });
 
 
 module.exports = usersRouter;
+

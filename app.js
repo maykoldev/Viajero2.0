@@ -8,6 +8,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const usersRouter = require('./controllers/users');
 const proveedoresRouter = require('./controllers/proveedores');
+const rutasRouter = require('./controllers/rutas');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 
@@ -32,6 +33,7 @@ app.use('/res', express.static(path.resolve('views', 'resultado')));
 app.use('/seat', express.static(path.resolve('views', 'bus')));
 app.use('/proveedor', express.static(path.resolve('views', 'proveedores')));
 app.use('/confirmar', express.static(path.resolve('views', 'confirmacion')));
+app.use('/rutas', express.static(path.resolve('views', 'rutas')));
 
 // IMPORTANTE
 app.use(express.json());
@@ -42,5 +44,6 @@ app.use(morgan('tiny'));
 // Rutas backend
 app.use('/api/users', usersRouter);
 app.use('/api/proveedores', proveedoresRouter);
+app.use('/api/rutas', rutasRouter);
 
 module.exports = app;
