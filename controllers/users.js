@@ -136,10 +136,10 @@ usersRouter.post('/admon/login', async (request, response) => {
 
     // Verificar la contraseña del administrador
     const adminPasswordMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
-
+    
     if (adminPasswordMatch) {
       console.log('Inicio de sesión exitoso para el administrador:', email);
-      return response.status(200).json({ isAdmin: true, redirectTo: '/admin-home' });
+      return response.status(200).json({ isAdmin: true, redirectTo: '/admon' });
     } else {
       console.log('Credenciales incorrectas para el administrador:', email);
       return response.status(401).json({ error: 'Credenciales incorrectas para el administrador' });

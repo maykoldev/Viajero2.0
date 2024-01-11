@@ -37,16 +37,17 @@ formulario.addEventListener('submit', async e => {
         console.log('Data recibida del servidor:', data); 
 
         if (response.ok) {
-            // Redirigir al usuario a la página correspondiente (/admon para el administrador)
-            console.log('Redirigiendo al usuario a la página:', data.isAdmin ? '/admon' : '/dashboard'); 
-
-            const redirectTo = data.redirectTo || (data.isAdmin ? '/admon' : '/');
-            window.location.href = redirectTo;
-            console.log('Redirigiendo al usuario');
-        } else {
+            if (data.isAdmin) {
+              console.log('Redirigiendo al usuario a la página del administrador');
+              window.location.href = data.redirectTo || '/admon';
+            } else {
+              console.log('Redirigiendo al usuario a la página del dashboard');
+              window.location.href = data.redirectTo || '/dashboard';
+            }
+          } else {
             // Mostrar un mensaje de error si las credenciales son incorrectas
-            console.log('Error al autenticar:', data.error); 
-        }
+            console.log('Error al autenticar:', data.error);
+          }
     } catch (error) {
         // Manejar errores de manera adecuada, ya sea mostrando un mensaje al usuario o registrando el error en la consola.
         console.error("Ocurrió un error:", error);

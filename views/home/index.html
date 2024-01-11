@@ -31,36 +31,36 @@
         <div class="relative flex justify-center w-[90%] my-4 md:animate-rotate-x md:animate-once md:animate-ease-linear md:animate-reverse md:animate-fill-forwards">
           <form class=" flex flex-col gap-6 md:flex-row md:justify-center items-center md:border-2 md:border-blue-950 md:w-[70%] font-overpass font-semibold   w-[80%] py-4 md:rounded-xl md:-mt-16">
             
-            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[95%] md:w-1/5 md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
               <label for="origen">Origen</label>
-              <select name="origen" id="origen" class="h-11 w-[90%] m-auto cursor-pointer">
+              <select name="origen" id="origen" class="h-11 w-full m-auto rounded-lg cursor-pointer">
                 <option >Seleccione</option>
               </select>
             </div>
 
-            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[95%] md:w-1/5 md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
               <label for="destino">Destino</label>
-              <select name="destino" id="destino" class="h-11 w-[90%] m-auto cursor-pointer">
+              <select name="destino" id="destino" class="h-11 w-full m-auto rounded-lg cursor-pointer">
                 <option >Seleccione</option>
               </select>
             </div>
 
-            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[95%] md:w-1/5 md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
               <label for="fecha">Fecha de ida</label>
-              <div class=" w-[90%] m-auto rounded-lg">
+              <div class=" w-full m-auto rounded-lg">
                 <input type="date" id="fechaPC" name="fecha" class="w-full rounded-lg h-11">
               </div>
             </div>
 
-            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[80%] md:w-[18%] md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
-              <label for="fechaV">Fecha de vuelta </label>
-              <div class=" w-[90%] m-auto rounded-lg">
-                <input type="date" id="fechaPC" name="fecha" class="w-full rounded-lg h-11">
+            <div class="flex flex-col border-2 border-blue-950 rounded-md gap-3 text-center py-2 w-[95%] md:w-1/5 md:border-y-0 md:border-l-0 md:rounded-none md:px-6 md:py-1 hover:bg-blue-100 justify-center ">
+              <label for="fechaV">Vuelta </label>
+              <div class=" w-full m-auto rounded-lg">
+                <input type="date" id="fechaVPC" name="fecha" class="w-full rounded-lg h-11">
               </div>
             </div>
 
-            <div>
-              <button id="buscar-ruta-pc" class="w-16 boton border-blue-100 text-blue-950 hover:bg-blue-100 hover:border-blue-950 hover:text-blue-800 ">Buscar</button>
+            <div class="bg-blue-400 w-28 m-8 p-2 text-center rounded-xl">
+              <button id="buscar-ruta-pc" class="w-16 boton border-blue-100 text-white hover:bg-blue-100 hover:border-blue-950 hover:text-blue-800 ">Buscar</button>
             </div>
             
           </form>
@@ -113,21 +113,27 @@
             <div class="w-[80%] md:w-[60%]">
                 <form action="" class=" flex flex-col gap-4 justify-center items-center md:flex-row">
                     <div class="w-3/5 border-2 border-blue-300 hover:bg-blue-500 hover:opacity-30 rounded-xl py-2 px-4 flex flex-col justify-center items-center font-bold">
-                        <label for="origen">Origen</label>
-                        <select name="origen" id="origen" class="h-11 w-[90%] m-auto cursor-pointer rounded-lg">
+                        <label for="origenM">Origen</label>
+                        <select name="origenM" id="origenM" class="h-11 w-full m-auto cursor-pointer rounded-lg">
                           <option >Seleccione</option>
                         </select>
                     </div>
                     <div class="w-3/5 border-2 border-blue-300 hover:bg-blue-500 hover:opacity-30 rounded-xl py-2 px-4 flex flex-col justify-center items-center font-bold">
-                        <label for="destino">Destino</label>
-                        <select name="destino" id="destino" class="h-11 w-[90%] m-auto cursor-pointer rounded-lg">
+                        <label for="destinoM">Destino</label>
+                        <select name="destinoM" id="destinoM" class="h-11 w-full m-auto cursor-pointer rounded-lg">
                           <option >Seleccione</option>
                         </select>
                     </div>
                     <div class="w-3/5 border-2 border-blue-300 hover:bg-blue-500 hover:opacity-30 rounded-xl py-2 px-4 flex flex-col justify-center items-center font-bold">
-                        <label for="fecha">Fecha de ida</label>
-                        <div class=" w-[90%] m-auto rounded-lg">
-                          <input type="date" id="fecha" name="fecha" class="w-full rounded-lg h-11">
+                        <label for="fechaM">Fecha de ida</label>
+                        <div class=" w-full m-auto rounded-lg">
+                          <input type="date" id="fechaM" name="fechaM" class="w-full rounded-lg h-11">
+                      </div>
+                    </div>
+                    <div class="w-3/5 border-2 border-blue-300 hover:bg-blue-500 hover:opacity-30 rounded-xl py-2 px-4 flex flex-col justify-center items-center font-bold">
+                      <label for="fechaVm">Fecha de Vuelta </label>
+                      <div class=" w-full m-auto rounded-lg">
+                        <input type="date" id="fechaVm" name="fechaVm" class="w-full rounded-lg h-11">
                       </div>
                     </div>
 
@@ -142,7 +148,7 @@
         
 
     </section>
-    <section class="my-4">
+    <section class="my-4 hidden md:flex justify-center items-center">
       <div class="flex flex-col gap-6">
         <div class="text-center font-bold"><h2 class="font-extrabold text-4xl max-md:text-xl text-blue-950">Metodos de pago</h2></div>
         <div class="flex justify-center">

@@ -1,17 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // ... (Código existente para menús y proveedores)
 
-    // Obtén el enlace "Agregar Rutas" por su ID
     const agregarRLink = document.getElementById('agregarR');
-
-    // Obtén la ventana emergente por su ID
     const modalAgregarRutas = document.getElementById('modalAgregarRutas');
-
-    // Obtén el botón "Cerrar" por su ID
     const cerrarRButton = document.getElementById('cerrarR');
-
-    // Obtén el botón "Guardar Rutas" por su ID
     const guardarRButton = document.getElementById('guardarR');
+    const formulario = document.getElementById('formAgregarRutas')
+    const listaRutas = document.getElementById('listadoR')
 
     // Agrega un evento de clic al enlace "Agregar Rutas"
     agregarRLink.addEventListener('click', function () {
@@ -34,7 +28,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const origen = document.getElementById('origen').value;
         const destino = document.getElementById('destino').value;
 
-        // Realizar la lógica de guardado en la base de datos
+        if(!nombre||!origen||!destino){
+            alert('Tonos los campos son Obligatorios')
+            return;
+        }
+        // lógica de guardado en la base de datos
         try {
             const response = await fetch("/api/rutas", {
                 method: 'POST',
@@ -52,13 +50,71 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Datos guardados correctamente en la base de datos:', data);
-                // Puedes realizar otras acciones aquí si es necesario
+
+                formulario.reset();
+               
+
+                // Oculta la ventana emergente cambiando la clase de 'flex' a 'hidden'
+                modalAgregarRutas.classList.remove('flex');
+                modalAgregarRutas.classList.add('hidden');
+
+                cargarRutas();
+                
             } else {
                 console.error('Error al intentar guardar datos en la base de datos.');
             }
         } catch (error) {
-            console.error('Error de red:', error);
+            console.error('Error al intentar guardar datos en la base de datos:', error);
+            alert('Ocurrió un error al intentar guardar los datos. Por favor, inténtelo nuevamente.');
         }
     });
 
+    // Función para cargar las rutas existentes
+    async function cargarRutas() {
+
+        listaRutas.innerHTML = '';
+        try {
+            const response = await fetch("/api/rutas");  // Endpoint para obtener todas las rutas
+            if (response.ok) {
+                const rutas = await response.json();
+                console.log('Rutas existentes:', rutas);
+
+                // Lógica para mostrar las rutas en la interfaz
+                rutas.forEach(nuevaRuta => {
+                    actualizarRutas(nuevaRuta);
+                });
+            } else {
+                console.error('Error al obtener las rutas existentes.');
+            }
+        } catch (error) {
+            console.error('Error de red al obtener las rutas existentes:', error);
+        }
+    }
+
+    function actualizarRutas(nuevaRuta) {
+        // Obtener el contenedor de la lista de rutas
+        const listaRutas = document.getElementById('listadoR');
+    
+        // Crear una nueva fila (tr) para la nueva ruta
+        const nuevaFila = document.createElement('tr');
+    
+        // Crear celdas (td) para cada propiedad de la ruta
+        const celdaNombre = document.createElement('td');
+        celdaNombre.textContent = nuevaRuta.nombre;
+    
+        const celdaOrigen = document.createElement('td');
+        celdaOrigen.textContent = nuevaRuta.origen;
+    
+        const celdaDestino = document.createElement('td');
+        celdaDestino.textContent = nuevaRuta.destino;
+    
+        // Agregar las celdas a la fila
+        nuevaFila.appendChild(celdaNombre);
+        nuevaFila.appendChild(celdaOrigen);
+        nuevaFila.appendChild(celdaDestino);
+    
+        // Agregar la nueva fila a la tabla existente
+        listaRutas.appendChild(nuevaFila);
+    }
+    cargarRutas();
 });

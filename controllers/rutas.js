@@ -1,5 +1,4 @@
-const express = require('express');
-const rutasRouter = express.Router(); // Usar express.Router() para crear el enrutador
+const rutasRouter = require('express').Router();
 const User = require('../models/user');
 const Ruta = require('../models/ruta');
 
@@ -12,9 +11,9 @@ rutasRouter.post('/', async (req, res) => {
         const userId = req.userId;
         const user = await User.findById(userId);
 
-        if (!user || !user.isAdmin) {
+        /*if (!user || !user.isAdmin) {
             return res.status(403).json({ error: 'Acceso no autorizado. Solo los administradores pueden crear rutas.' });
-        }
+        }*/
         
 
         // Si el usuario es un administrador, puedes crear la nueva ruta
@@ -48,4 +47,4 @@ rutasRouter.get('/', async (req, res) => {
     }
 });
 
-module.exports = rutasRouter; // Exportar rutasRouter en lugar de router
+module.exports = rutasRouter; 
