@@ -31,6 +31,18 @@ proveedoresRouter.post('/', async (request, response) => {
   }
 });
 
+//endpoint para obtener los proveedores
+proveedoresRouter.get('/', async (req, res) => {
+
+  try{
+    const proveedores = await Proveedor.find();
+
+    res.status(200).json(proveedores);
+  }catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error al obtener los proveedores en la base de datos' });
+  }
+});
 
 module.exports = proveedoresRouter;
 

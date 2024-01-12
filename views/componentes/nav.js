@@ -429,26 +429,4 @@ if(window.location.pathname === '/'){
 }
 
 
-//eventos
-const navBtn = navegacion.children[0].children[1]
-//console.log(navBtn);
 
-navBtn.addEventListener('click',e=>{
-    const menuMobile = navegacion.children[0].children[3];
-    //console.log(menuMobile);
-    if(!navBtn.classList.contains('active')){
-        // menu movil esta cerrado y vamos a mostrarlo
-        navBtn.classList.add('active');
-  
-  
-  navBtn.innerHTML= '<path stroke="none" d="M0 0h24v24H0z" fill="none"/>  <path d="M18 6l-12 12" /> <path d="M6 6l12 12" />'
-  menuMobile.classList.remove('hidden');
-  menuMobile.classList.add('flex'); 
-    }else{
-        //menu movil esta abierto y vamos a cerrarlo
-        navBtn.classList.remove('active');
-        navBtn.innerHTML= '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />'
-        menuMobile.classList.remove('flex');
-        menuMobile.classList.add('hidden');
-    }
-})

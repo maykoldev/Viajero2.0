@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
   const userMenuDiv = document.getElementById("userMenu");
   const userMenu = document.getElementById("userButton");
@@ -14,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const ganancia = document.getElementById("porcentaje");
   const guardar = document.getElementById("guardarP");
   const cerrarForm = document.getElementById("cerrarF");
+  const listaProveedoresContainer = document.getElementById('listadoP');
 
   document.onclick = check;
 
@@ -100,17 +100,25 @@ document.addEventListener("DOMContentLoaded", function () {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          razonSocial: razonSocialValue,
-          rif: rifValue,
-          telefono: telefonoValue,
-          correo: correoValue,
-          porcentajeGanancia: gananciaValue,
+          razonSocial,
+          rif,
+          telefono,
+          correo,
+          porcentajeGanancia,
         }),
       });
     
       if (response.ok) {
-        cargarListaProveedores();
+        const data = await response.json();
+        console.log('datos guardados corectamente: ', data);
+
+        formulario.reset();
+
+        //ocultar ventana
+        modalAgregarProveedor.classList.remove('flex');
         modalAgregarProveedor.classList.add("hidden");
+
+        cargarListaProveedores();
       } else {
         // Manejar errores específicos o genéricos aquí
         const errorMessage = await response.text();
@@ -126,15 +134,28 @@ document.addEventListener("DOMContentLoaded", function () {
   function showAlert(message) {
     alert(message);
   }
-});
+  
+  cargarListaProveedores();
 
+  // Función para cargar proveedores
 async function cargarListaProveedores() {
-  try {
+   console.log('hola')
+  listaProveedoresContainer.innerHTML = '';
+ 
+  try { 
+   console.log('hola 2')
+    
     const response = await fetch("/api/proveedores");
+    console.log(response);
     if (response.ok) {
       const proveedores = await response.json();
-      mostrarListaProveedores(proveedores);
+      console.log('proveedores existentes', proveedores);
+
+      proveedores.forEach(nuevoProveedor => {
+        actualizarProveedores(nuevoProveedor);
+      });
     } else {
+      
       console.error("Error al cargar la lista de proveedores.");
     }
   } catch (error) {
@@ -142,30 +163,38 @@ async function cargarListaProveedores() {
   }
 }
 
-function mostrarListaProveedores(proveedores) {
-  console.log("proveedores Recibitos", proveedores)
+function actualizarProveedores(nuevoProveedor) {
+  // Obtener el contenedor de la lista de proveedores
+  const listaProveedoresContainer = document.getElementById('listadoP');
 
-  const tabla = document.getElementById("listadoP");
+  // Crear una nueva fila (tr) para el nuevo proveedor
+  const nuevaFila = document.createElement('tr');
 
-  // Limpiar la tabla antes de agregar nuevos datos
-  tabla.innerHTML = "";
+  // Crear celdas para cada propiedad
+  const celdaRazonSocial = document.createElement('td');
+  celdaRazonSocial.textContent = nuevoProveedor.razonSocial;
 
-  // Iterar sobre la lista de proveedores y agregar filas a la tabla
-  proveedores.forEach((proveedor) => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td>${proveedor.razonSocial}</td>
-      <td>${proveedor.rif}</td>
-      <td>${proveedor.ventas}</td>
-      <td>${proveedor.correo}</td>
-      <td>${proveedor.telefono}</td>
-      <td>${proveedor.porcentajeGanancia}</td>
-      <td>Acciones</td>
-    `;
+  const celdaRif = document.createElement('td');
+  celdaRif.textContent = nuevoProveedor.rif;
 
-    // Agregar la fila a la tabla
-    tabla.appendChild(fila);
-  });
+  const celdaTelefono = document.createElement('td');
+  celdaTelefono.textContent = nuevoProveedor.telefono;
+
+  const celdaCorreo = document.createElement('td');
+  celdaCorreo.textContent = nuevoProveedor.correo;
+
+  const celdaGanancia = document.createElement('td');
+  celdaGanancia.textContent = nuevoProveedor.porcentajeGanancia;
+
+  // Agregar las celdas a la fila
+  nuevaFila.appendChild(celdaRazonSocial);
+  nuevaFila.appendChild(celdaRif);
+  nuevaFila.appendChild(celdaTelefono);
+  nuevaFila.appendChild(celdaCorreo);
+  nuevaFila.appendChild(celdaGanancia);
+
+  // Agregar nueva fila a la tabla existente
+  listaProveedoresContainer.appendChild(nuevaFila);
 }
 
 function checkParent(t, elm) {
@@ -177,3 +206,8 @@ function checkParent(t, elm) {
   }
   return false;
 }
+
+
+
+});
+
