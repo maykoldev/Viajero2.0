@@ -2,7 +2,7 @@ const proveedoresRouter = require('express').Router();
 const Proveedor = require('../models/proveedor'); 
 
 proveedoresRouter.post('/', async (request, response) => {
-  const { razonSocial, rif, telefono, correo, porcentajeGanancia } = request.body;
+  const { razonSocial, rif, rutasP, telefono, correo, porcentajeGanancia } = request.body;
 
   try {
     // Verificar si el RIF ya está registrado
@@ -17,6 +17,7 @@ proveedoresRouter.post('/', async (request, response) => {
     const nuevoProveedor = new Proveedor({
       razonSocial,
       rif,
+      rutasP,
       telefono,
       correo,
       porcentajeGanancia,

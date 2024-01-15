@@ -43,8 +43,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  agregarProveedor.addEventListener("click", (e) => {
+  agregarProveedor.addEventListener("click", async (e) => {
     e.stopPropagation();
+    await cargarNombresR();
     toggleVisibility(modalAgregarProveedor);
     modalAgregarProveedor.classList.add("flex");
   });
@@ -205,6 +206,30 @@ function checkParent(t, elm) {
     t = t.parentNode;
   }
   return false;
+}
+
+async function cargarNombresR() {
+    const selectElement = document.getElementById("nombreR");
+    selectElement.innerHTML = ''; // Limpiar opciones existentes en el select
+
+    // Agregar la opción por defecto
+    selectElement.innerHTML += '<option value="">Seleccione</option>';
+
+    try {
+        const response = await fetch("/api/rutas");
+        if (response.ok) {
+            const nombresRutas = await response.json();
+
+            // Iterar sobre los nombres de las rutas y agregar opciones al select
+            nombresRutas.forEach(function (ruta) {
+                selectElement.innerHTML += `<option value="${ruta.nombre}">${ruta.nombre}</option>`;
+            });
+        } else {
+            console.error("Error al obtener nombres de rutas");
+        }
+    } catch (error) {
+        console.error("Error durante la solicitud:", error);
+    }
 }
 
 

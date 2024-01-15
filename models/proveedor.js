@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const proveedorSchema = new mongoose.Schema({
     razonSocial: String,            // Razón Social del proveedor
     rif: String,                    // RIF del proveedor
+    rutasP:String,                   // Rutas de viaje ofrecidas por el proveedor
     telefono: String,               // Teléfono del proveedor
     correo: String,                 // Correo electrónico del proveedor
     porcentajeGanancia: String,     // Porcentaje de ganancia del proveedor
