@@ -7,7 +7,7 @@ var navMenu = document.getElementById("nav-toggle");
 document.onclick = check;
 
 function check(e){
-  var target = (e && e.target) || (event && event.srcElement);
+  var target = (e && e.target);
 
   //User Menu
   if (!checkParent(target, userMenuDiv)) {

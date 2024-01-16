@@ -22,6 +22,20 @@ const morgan = require('morgan');
   }
 })();
 
+// Ruta para cerrar sesión
+app.post('/api/logout', (req, res) => {
+  // Destruye la sesión
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+      res.status(500).json({ error: 'Error al cerrar sesión' });
+    } else {
+      // Redirige al home o a la página de inicio de sesión
+      res.status(200).json({ message: 'Sesión cerrada exitosamente' });
+    }
+  });
+});
+
 // Rutas frontend
 app.use('/', express.static(path.resolve('views', 'home')));
 app.use('/login', express.static(path.resolve('views', 'login')));

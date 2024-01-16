@@ -1,4 +1,7 @@
-// Obtén los elementos del DOM
+
+const usuarioLogueado = true;
+
+crearNavHome(usuarioLogueado);
 const origenSelect = document.getElementById('origenM');
 const destinoSelect = document.getElementById('destinoM');
 const fechaInput = document.getElementById('fechaM');
@@ -6,6 +9,38 @@ const buscarBtn = document.getElementById('buscar-ruta');
 const origenPc = document.getElementById('origen');
 const destinoPc = document.getElementById('destino');
 const fechaPc = document.getElementById('fecha');
+const userMenu = document.getElementById('userButton');
+const userMenuDiv = document.getElementById('userMenu');
+const enlaceSalir = document.getElementById('salir');
+
+
+userMenu.addEventListener('click', function (e) {
+  e.stopPropagation(); // Evita que el clic se propague al documento
+  // Alterna la clase 'invisible' para mostrar u ocultar el menú
+  userMenuDiv.classList.toggle('invisible');
+});
+
+// Cierra el menú si se hace clic fuera de él
+document.addEventListener("click", function () {
+  userMenuDiv.classList.add("invisible");
+});
+
+// Agrega el evento de clic al enlace "Salir"
+enlaceSalir.addEventListener('click', async function (e) {
+  e.preventDefault();
+
+  // Intenta cerrar sesión en el servidor
+  const cerrarSesionExitosa = await cerrarSesionEnServidor();
+
+  if (cerrarSesionExitosa) {
+      // Si el cierre de sesión en el servidor fue exitoso, redirige al home de usuarios no logueados
+      window.location.href = '/';
+  } else {
+      // Maneja el caso en que el cierre de sesión en el servidor falla
+      alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
+  }
+});
+
 
 document.addEventListener("DOMContentLoaded", function () {
   cargarRutas();

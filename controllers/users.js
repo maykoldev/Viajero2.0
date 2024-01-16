@@ -4,6 +4,7 @@ const User = require('../models/user');
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 
 dotenv.config();
 
@@ -150,6 +151,21 @@ usersRouter.post('/admon/login', async (request, response) => {
   }
 });
 
+// Ruta de cierre de sesión
+usersRouter.post('/logout', async (req, res) => {
+  try {
+    // Si estás utilizando express-session, puedes destruir la sesión así
+    req.session.destroy();
+
+    // También puedes limpiar las cookies del usuario si las estás utilizando
+    res.clearCookie('tu_cookie_de_sesion');
+
+    res.status(200).json({ message: 'Sesión cerrada exitosamente' });
+  } catch (error) {
+    console.error('Error al cerrar sesión:', error);
+    res.status(500).json({ error: 'Error al cerrar sesión' });
+  }
+});
 
 module.exports = usersRouter;
 
