@@ -1,49 +1,66 @@
+document.addEventListener("DOMContentLoaded", async function () {
+  let usuarioLogueado = false;
+  console.log("Usuario Logueado (inicial):", usuarioLogueado);
+  crearNavHome(usuarioLogueado);
+  const origenSelect = document.getElementById('origenM');
+  const destinoSelect = document.getElementById('destinoM');
+  const fechaInput = document.getElementById('fechaM');
+  const buscarBtn = document.getElementById('buscar-ruta');
+  const origenPc = document.getElementById('origen');
+  const destinoPc = document.getElementById('destino');
+  const fechaPc = document.getElementById('fecha');
+  const buscarBtnPc = document.getElementById('buscar-ruta-pc');
+  const userMenu = document.getElementById('userButton');
+  const userMenuDiv = document.getElementById('userMenu');
+  const enlaceSalir = document.getElementById('salir');
 
-const usuarioLogueado = true;
+  userMenu.addEventListener('click', function (e) {
+    e.stopPropagation();
+    userMenuDiv.classList.toggle('invisible');
+  });
+  // Cierra el menú si se hace clic fuera de él
+  document.addEventListener("click", function () {
+    userMenuDiv.classList.add("invisible");
+  });
+  async function cerrarSesionEnServidor() {
+    console.log('intentando cerrar sesion en servidor')
+    try {
+      const response = await fetch('/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
 
-crearNavHome(usuarioLogueado);
-const origenSelect = document.getElementById('origenM');
-const destinoSelect = document.getElementById('destinoM');
-const fechaInput = document.getElementById('fechaM');
-const buscarBtn = document.getElementById('buscar-ruta');
-const origenPc = document.getElementById('origen');
-const destinoPc = document.getElementById('destino');
-const fechaPc = document.getElementById('fecha');
-const userMenu = document.getElementById('userButton');
-const userMenuDiv = document.getElementById('userMenu');
-const enlaceSalir = document.getElementById('salir');
+      if (response.ok) {
 
-
-userMenu.addEventListener('click', function (e) {
-  e.stopPropagation(); // Evita que el clic se propague al documento
-  // Alterna la clase 'invisible' para mostrar u ocultar el menú
-  userMenuDiv.classList.toggle('invisible');
-});
-
-// Cierra el menú si se hace clic fuera de él
-document.addEventListener("click", function () {
-  userMenuDiv.classList.add("invisible");
-});
-
-// Agrega el evento de clic al enlace "Salir"
-enlaceSalir.addEventListener('click', async function (e) {
-  e.preventDefault();
-
-  // Intenta cerrar sesión en el servidor
-  const cerrarSesionExitosa = await cerrarSesionEnServidor();
-
-  if (cerrarSesionExitosa) {
-      // Si el cierre de sesión en el servidor fue exitoso, redirige al home de usuarios no logueados
-      window.location.href = '/';
-  } else {
-      // Maneja el caso en que el cierre de sesión en el servidor falla
-      alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
+        usuarioLogueado = false;
+        return true;
+      } else {
+        console.error('Error al cerrar sesión en el servidor:', response.statusText);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error al cerrar sesión en el servidor:', error);
+      return false;
+    }
   }
-});
 
-
-document.addEventListener("DOMContentLoaded", function () {
-  cargarRutas();
+  // Agrega el evento de clic al enlace "Salir"
+  enlaceSalir.addEventListener('click', async function (e) {
+    e.preventDefault();
+    
+    try {
+      const cerrarSesionExitosa = await cerrarSesionEnServidor();
+      
+      if (cerrarSesionExitosa) {
+        window.location.href = '/';
+        console.log('click en salir')
+      } else {
+        alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error en enlaceSalir.addEventListener:', error);
+    }
+  });
 
   // Función para cargar las rutas existentes
   async function cargarRutas() {
@@ -65,9 +82,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Función para llenar las opciones de origen y destino
   function llenarOpciones(rutas) {
-    /* Limpiar opciones anteriores si las hay
+    // Limpiar opciones anteriores si las hay
     origenSelect.innerHTML = '';
-    destinoSelect.innerHTML = '';*/
+    destinoSelect.innerHTML = '';
 
     // Crear opciones basadas en las rutas existentes
     rutas.forEach(ruta => {
@@ -76,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
       opcionOrigen.value = ruta.origen;
       opcionOrigen.textContent = ruta.origen;
       origenSelect.appendChild(opcionOrigen);
-      
 
       // Crear opción para destinoMovil
       const opcionDestino = document.createElement('option');
@@ -98,22 +114,30 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  buscarBtn.addEventListener('click', function (event) {
-    event.preventDefault();
-    // Obtener los valores seleccionados de los select input y la fecha
-    const origen = origenSelect.value;
-    const destino = destinoSelect.value;
-    const fecha = fechaInput.value;
-    const origin = origenPc.value;
-    const destination = destinoPc.value;
+  // Función que se ejecutará cuando se haga clic en los botones de búsqueda
+function buscarClickHandler(event) {
+  event.preventDefault();
 
-    // Validar que los campos estén llenos
-    if (!origen || !destino || !fecha ||!origin || !destination) {
+  const origen = origenSelect.value || origenPc.value;
+  const destino = destinoSelect.value || destinoPc.value;
+  const fecha = fechaInput.value || fechaPc.value;
+
+  if (!origen || !destino || !fecha) {
       alert('Todos los campos deben estar llenos');
       return false;
-    }
+  }
 
-    // redirección a la página de resultados
-    window.location.href = `/res?origen=${origen}&destino=${destino}&fecha=${fecha}`;
-  });
+  window.location.href = `/res?origen=${origen}&destino=${destino}&fecha=${fecha}`;
+}
+
+// Agregar el evento click para el botón de búsqueda en pantallas normales
+buscarBtn.addEventListener('click', buscarClickHandler);
+
+// Agregar el evento click para el botón de búsqueda en pantallas grandes
+if (buscarBtnPc) {
+  buscarBtnPc.addEventListener('click', buscarClickHandler);
+}
+
+  // Cargar rutas al cargar el DOM
+  cargarRutas();
 });

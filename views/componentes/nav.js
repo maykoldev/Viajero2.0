@@ -4,9 +4,9 @@ const navRutas = document.querySelector('#navRutas');
 
 
 const crearNavHome = (usuarioLogueado) => {
+    console.log("Usuario Logueado:", usuarioLogueado);
     if (usuarioLogueado) {
-        // Si el usuario está logueado, mostrar opciones del bloque 2
-        navegacion.innerHTML = `
+                navegacion.innerHTML = `
             <div class="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto py-4">
                 <a href="/" class="w-32"><img src="/img/LOGO2.png" alt="" class="w-32 pt-3"></a> 
                 <svg xmlns="http://www.w3.org/2000/svg"

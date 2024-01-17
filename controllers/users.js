@@ -5,6 +5,7 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
+const {verificarAutenticacion} = require('../middleware/auth')
 
 dotenv.config();
 
@@ -116,6 +117,15 @@ usersRouter.post('/login', async (request, response) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (passwordMatch) {
+      // Establece la variable usuarioLogueado a true
+      let usuarioLogueado = true;
+
+      // Llama a la función para actualizar la interfaz
+      crearNavHome(usuarioLogueado);
+
+      // Almacena el ID del usuario en la sesión
+      req.session.userId = user.id;
+
       return response.status(200).json({ user });
     } else {
       return response.status(401).json({ error: 'Credenciales incorrectas' });
@@ -152,13 +162,10 @@ usersRouter.post('/admon/login', async (request, response) => {
 });
 
 // Ruta de cierre de sesión
-usersRouter.post('/logout', async (req, res) => {
+usersRouter.post('/logout', verificarAutenticacion, async (req, res) => {
   try {
-    // Si estás utilizando express-session, puedes destruir la sesión así
+    
     req.session.destroy();
-
-    // También puedes limpiar las cookies del usuario si las estás utilizando
-    res.clearCookie('tu_cookie_de_sesion');
 
     res.status(200).json({ message: 'Sesión cerrada exitosamente' });
   } catch (error) {

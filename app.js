@@ -3,6 +3,7 @@ dotenv.config();
 
 const cors = require('cors');
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const mongoose = require('mongoose');
 const path = require('path');
@@ -11,6 +12,7 @@ const proveedoresRouter = require('./controllers/proveedores');
 const rutasRouter = require('./controllers/rutas');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
+const { verificarAutenticacion } = require('./middleware/auth');
 
 (async () => {
   try {
@@ -22,8 +24,14 @@ const morgan = require('morgan');
   }
 })();
 
+app.use(session({
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true
+}));
+
 // Ruta para cerrar sesión
-app.post('/api/logout', (req, res) => {
+app.post('/api/logout', verificarAutenticacion, (req, res) => {
   // Destruye la sesión
   req.session.destroy((err) => {
     if (err) {
