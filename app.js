@@ -30,6 +30,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
+
 // Ruta para cerrar sesión
 app.post('/api/logout', verificarAutenticacion, (req, res) => {
   // Destruye la sesión
@@ -43,6 +44,8 @@ app.post('/api/logout', verificarAutenticacion, (req, res) => {
     }
   });
 });
+
+app.get
 
 // Rutas frontend
 app.use('/', express.static(path.resolve('views', 'home')));
@@ -67,5 +70,6 @@ app.use(morgan('tiny'));
 app.use('/api/users', usersRouter);
 app.use('/api/proveedores', proveedoresRouter);
 app.use('/api/rutas', rutasRouter);
+
 
 module.exports = app;

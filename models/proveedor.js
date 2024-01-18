@@ -1,11 +1,19 @@
 // Importar la biblioteca de mongoose para la conexión y definición del modelo
 const mongoose = require('mongoose');
+const { v4: uuidv4 } = require('uuid');
 
 // Definir el esquema (schema) de la base de datos para los proveedores
 const proveedorSchema = new mongoose.Schema({
+    proveedorId: {
+        type: String,
+        default: uuidv4, // Generar un ID único usando uuidv4 como valor predeterminado
+        unique: true,
+    },
+    logo:Buffer,
     razonSocial: String,            // Razón Social del proveedor
     rif: String,                    // RIF del proveedor
-    rutasP:String,                   // Rutas de viaje ofrecidas por el proveedor
+    ruta:String,                   // Rutas de viaje ofrecidas por el proveedor
+    fecha:String,                  //fecha de salida por el proveedor
     telefono: String,               // Teléfono del proveedor
     correo: String,                 // Correo electrónico del proveedor
     porcentajeGanancia: String,     // Porcentaje de ganancia del proveedor

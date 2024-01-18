@@ -1,10 +1,12 @@
-const usuarioLogueado = true;
+document.addEventListener("DOMContentLoaded", async function () {
+  let usuarioLogueado = false;
 
-crearNavHome(usuarioLogueado);
+crearNavLogin(usuarioLogueado);
 
 const formulario = document.querySelector('#formulario');
 const emailInput = document.querySelector('#correo-input');
 const passwordInput = document.querySelector('#password-input');
+
 
 formulario.addEventListener('submit', async e => {
   console.log('Evento del formulario activado');
@@ -28,6 +30,7 @@ formulario.addEventListener('submit', async e => {
 
       // Hacer la solicitud al servidor para autenticar al usuario
       const response = await fetch('/api/users/login', {
+        
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -41,6 +44,7 @@ formulario.addEventListener('submit', async e => {
       console.log('Data recibida del servidor:', data); 
 
       if (response.ok) {
+        usuarioLogueado = true;
           if (data.isAdmin) {
             console.log('Redirigiendo al usuario a la página del administrador');
             window.location.href = '/admin';  
@@ -59,3 +63,5 @@ formulario.addEventListener('submit', async e => {
 });
 
 
+
+});

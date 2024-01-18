@@ -5,7 +5,8 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-const {verificarAutenticacion} = require('../middleware/auth')
+const {verificarAutenticacion} = require('../middleware/auth');
+
 
 dotenv.config();
 
@@ -107,7 +108,10 @@ usersRouter.get('/confirmar/:confirmationCode', async (request, response) => {
 usersRouter.post('/login', async (request, response) => {
   try {
     const { email, password } = request.body;
+    console.log('buscando usuario en la base de datos', email);
     const user = await User.findOne({ email });
+    console.log('usuario encontrado', user);
+
 
     if (!user) {
       return response.status(404).json({ error: 'El usuario no existe' });
@@ -117,21 +121,23 @@ usersRouter.post('/login', async (request, response) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (passwordMatch) {
-      // Establece la variable usuarioLogueado a true
+      /* Establece la variable usuarioLogueado a true
       let usuarioLogueado = true;
 
       // Llama a la función para actualizar la interfaz
-      crearNavHome(usuarioLogueado);
+      crearNavHome(usuarioLogueado);*/
 
       // Almacena el ID del usuario en la sesión
-      req.session.userId = user.id;
+      request.session.userId = user.id;
 
-      return response.status(200).json({ user });
+      return response.status(200).json({ redirectTo: '/' });
+
     } else {
       return response.status(401).json({ error: 'Credenciales incorrectas' });
     }
   } catch (error) {
-    return response.status(500).json({ error: 'Error al buscar el usuario en la base de datos' });
+    console.error('Error al procesar la solicitud:', error);
+    return response.status(500).json({ error: 'Error al procesar la solicitud', details: error.message });
   }
 });
 
@@ -139,6 +145,7 @@ usersRouter.post('/login', async (request, response) => {
 usersRouter.post('/admon/login', async (request, response) => {
   try {
     const { email, password } = request.body;
+    console.log('intentando iniciar sesion con:', email, password);
 
     if (email !== process.env.ADMIN_EMAIL) {
       console.log('Credenciales incorrectas para el administrador:', email);

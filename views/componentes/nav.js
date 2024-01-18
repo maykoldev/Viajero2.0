@@ -32,7 +32,7 @@ const crearNavHome = (usuarioLogueado) => {
                             <li><a href="#" class="px-4 py-2 block text-blue-100 hover:bg-blue-800 no-underline hover:no-underline">Mi Cuenta</a></li>
                             <li><a href="#" class="px-4 py-2 block text-blue-100 hover:bg-blue-800 no-underline hover:no-underline">Notificationes</a></li>
                             <li><hr class="border-t mx-2 border-blue-400"></li>
-                            <li><a href="#" id="salir" class="px-4 py-2 block text-blue-100 hover:bg-blue-800 no-underline hover:no-underline">Salir</a></li>
+                            <li><a id="cerrarS" href="#"  class="px-4 py-2 block text-blue-100 hover:bg-blue-800 no-underline hover:no-underline">Salir</a></li>
                         </ul>
                     </div>
                 </div>
@@ -69,31 +69,69 @@ const crearNavHome = (usuarioLogueado) => {
 }
 
 //console.log(navegacion)
-const crearNavLogin = () => {
-    navegacion.innerHTML = `
-    <div class="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto">
-            <a href="/" class="w-32"><img src="/img/LOGO2.png" alt="" class="w-32 pt-3"></a> 
-            <svg xmlns="http://www.w3.org/2000/svg"
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke-width="1.5" 
-            stroke="currentColor" 
-            class="w-10 h-10 text-white cursor-pointer p-2 hover:bg-blue-500 rounded-lg md:hidden z-50">
-             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
+const crearNavLogin = (usuarioLogueado) => {
+    console.log("Usuario Logueado:", usuarioLogueado);
+    if (usuarioLogueado) {
+                navegacion.innerHTML = `
+            <div class="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto py-4">
+                <a href="/" class="w-32"><img src="/img/LOGO2.png" alt="" class="w-32 pt-3"></a> 
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke-width="1.5" 
+                    stroke="currentColor" 
+                    class="w-10 h-10 text-white cursor-pointer p-2 hover:bg-blue-500 rounded-lg md:hidden z-50">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
 
-                <!--menu pc-->
+                
+                <div class="relative text-sm text-blue-100">
+                    <button id="userButton" class="flex items-center focus:outline-none mr-3">
+                        <img class="w-8 h-8 rounded-full mr-4" src="http://i.pravatar.cc/300" alt="Avatar of User"> 
+                        <span class="hidden md:inline-block text-blue-100">Hi, User</span>
+                        <svg class="pl-2 h-2 fill-current text-blue-100" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
+                            <g><path d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"/></g>
+                        </svg>
+                    </button>
+                    <div id="userMenu" class="bg-blue-900 rounded shadow-md absolute mt-12 top-0 right-0 min-w-full overflow-auto z-30 invisible">
+                        <ul class="list-reset">
+                            <li><a href="#" class="px-4 py-2 block text-blue-100 hover:bg-blue-800 no-underline hover:no-underline">Mi Cuenta</a></li>
+                            <li><a href="#" class="px-4 py-2 block text-blue-100 hover:bg-blue-800 no-underline hover:no-underline">Notificationes</a></li>
+                            <li><hr class="border-t mx-2 border-blue-400"></li>
+                            <li><a id="cerrarS" href="#"  class="px-4 py-2 block text-blue-100 hover:bg-blue-800 no-underline hover:no-underline">Salir</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        // Si el usuario no está logueado, mostrar botones de inicio de sesión y registro
+        navegacion.innerHTML = `
+            <div class="flex items-center justify-between px-4 h-16 max-w-7xl mx-auto py-4">
+                <a href="/" class="w-32"><img src="/img/LOGO2.png" alt="" class="w-32 pt-3"></a> 
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke-width="1.5" 
+                    stroke="currentColor" 
+                    class="w-10 h-10 text-white cursor-pointer p-2 hover:bg-blue-500 rounded-lg md:hidden z-50">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                </svg>
+
+                <!-- Menú PC -->
                 <div class="hidden md:flex " >
+                    <a href="/login" class="text-white font-bold hover:bg-blue-400 py-2 px-4 rounded-lg transition ease-in-out w-full">Login</a>
                     <a href="/registro" class="bg-blue-500 text-white hover:text-black font-bold hover:bg-blue-300 py-2 px-4 rounded-lg transition ease-in-out w-full text-center">Registro</a>
                 </div>
 
-                <!--menu movil-->
+                <!-- Menú móvil -->
                 <div class="z-40 bg-blue-700 fixed top-0 right-0 left-[50%] bottom-0 flex-col justify-start pt-12 items-center gap-4 hidden" >
-
-                    <a href="/registro" class=" text-white hover:text-black font-bold hover:bg-blue-300 py-2 px-4 rounded-lg transition ease-in-out w-full text-center">Registro</a>
+                    <a href="/login" class="text-white font-bold hover:bg-blue-400 py-2 px-4 rounded-lg transition ease-in-out w-full text-center">Login</a>
+                    <a href="/registro" class="bg-blue-500 text-white hover:text-black font-bold hover:bg-blue-300 py-2 px-4 rounded-lg transition ease-in-out w-full text-center">Registro</a>
                 </div>
-        </div>
-    `
+            </div>
+        `;
+    }
 }
 const crearNavReg = () => {
     navegacion.innerHTML = `

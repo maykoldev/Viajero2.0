@@ -1,86 +1,77 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Malvis Travel's</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
 </head>
+
 <body class="bg-blue-200 text-blue-950 font">
     <header>
-        <div class="border-b-2 border-blue-800 h-20 ">
-            
-          <nav id="navegacion" class="bg-blue-300 h-[78px] right-0 left-0 ">
-          </nav>
-        </div>    
+        <div class="border-b-2 border-blue-800 h-20">
+            <nav id="navegacion" class="bg-blue-300 h-[78px] right-0 left-0">
+                <!-- Puedes agregar elementos de navegación aquí -->
+            </nav>
+        </div>
     </header>
 
-    <!--contenedor-->
-    <div class="text-center text-blue-950">
-        <span class="text-xs text-gray-400">Para Seleccionar haga click en el logo de la empresa</span>
-        <div id="resultado" class="w-[90%] flex flex-col justify-center mx-auto -mt-4">
-            <div class="flex mt-4 text-xs gap-4 w-full">
-                <!--buses encontrados-->
+    <!-- Contenedor principal -->
+    <div class="text-center text-blue-950 mt-8">
+        <span class="text-xs text-gray-400">Para seleccionar, haz clic en el logo de la empresa</span>
+
+        <div class="w-[90%] mx-auto">
+            <div class="flex mt-4 text-xs gap-4">
+                <!-- Buses encontrados -->
                 <div class="text-center">
                     <span>Buses encontrados</span>
                 </div>
-                <!--filtro-->
+                <!-- Filtro -->
                 <div class="border-2 border-blue-950 flex gap-4 rounded-md w-full justify-center items-center text-center">
-                    <!--salida-->
-                    <div class="w-[25%] ">
+                    <!-- Salida -->
+                    <div class="w-[25%]">
                         <a href="#">Salida</a>
                     </div>
-                    <!--llegada-->
-                    <div class="w-[25%] ">
-                        <a href="#">Llegada</a>
+                    <!-- Calificación -->
+                    <div class="w-[25%]">
+                        <a href="#">Calificación</a>
                     </div>
-                    <!--Calificacion-->
-                    <div class="w-[25%] ">
-                        <a href="#">Calificacion</a>
-                    </div>
-                    <!--precio-->
-                    <div class="w-[25%] ">
+                    <!-- Precio -->
+                    <div class="w-[25%]">
                         <a href="#">Precio</a>
                     </div>
                 </div>
             </div>
-            <!--logo-->
-            <div id="resultado" class="flex mt-2 gap-4 ">
+
+            <!-- Logo y Detalles -->
+            <div class="flex mt-2 gap-4 ">
                 <div class="border-2 border-blue-950">
-                    
                     <button id="seleccionarBtn" class="text-xs text-gray-400">
                         <img src="/img/LOGO2.png" alt="" class="w-24 pt-3">
                     </button>
-
                 </div>
-            <!--info-->
+
+                <!-- Detalles -->
                 <div class="border-2 border-blue-950 flex gap-4 w-full justify-center items-center rounded-md text-center">
                     <div class="w-1/4 -mt-8">
                         <span>Hora</span>
                     </div>
                     <div class="w-1/4 -mt-8">
-                        <span>Terminal</span>
-                    </div>
-                    <div class="w-1/4 -mt-8">
-                        <span>Calificacion</span>
+                        <span>Calificación</span>
                     </div>
                     <div class="w-1/4 -mt-8">
                         <span>Precio</span>
                     </div>
-                </div> 
-                
+                </div>
             </div>
-            
-            
-
         </div>
-        
     </div>
 
     <script src="./index.js"></script>
     <script src="../componentes/nav.js"></script>
-    
 </body>
+
 </html>

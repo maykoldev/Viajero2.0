@@ -11,8 +11,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   const fechaPc = document.getElementById('fecha');
   const buscarBtnPc = document.getElementById('buscar-ruta-pc');
   const userMenu = document.getElementById('userButton');
-  const userMenuDiv = document.getElementById('userMenu');
-  const enlaceSalir = document.getElementById('salir');
+  
+  /*const userMenuDiv = document.getElementById('userMenu');
+  const enlaceSalir = document.getElementById('cerrarS');
 
   userMenu.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -45,22 +46,26 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   // Agrega el evento de clic al enlace "Salir"
-  enlaceSalir.addEventListener('click', async function (e) {
-    e.preventDefault();
-    
-    try {
-      const cerrarSesionExitosa = await cerrarSesionEnServidor();
-      
-      if (cerrarSesionExitosa) {
-        window.location.href = '/';
-        console.log('click en salir')
-      } else {
-        alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
-      }
-    } catch (error) {
-      console.error('Error en enlaceSalir.addEventListener:', error);
-    }
-  });
+if (enlaceSalir) {
+    enlaceSalir.addEventListener('click', async function (e) {
+        e.preventDefault();
+
+        try {
+            const cerrarSesionExitosa = await cerrarSesionEnServidor();
+
+            if (cerrarSesionExitosa) {
+                window.location.href = '/';
+            } else {
+                alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
+            }
+        } catch (error) {
+            console.error('Error en enlaceSalir.addEventListener:', error);
+        }
+    });
+} else {
+    console.error('Elemento con ID "cerrarS" no encontrado.');
+}*/
+
 
   // Función para cargar las rutas existentes
   async function cargarRutas() {
@@ -118,6 +123,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 function buscarClickHandler(event) {
   event.preventDefault();
 
+  if(!usuarioLogueado){
+    window.location.href = '/login'; 
+    return;
+  }
+
   const origen = origenSelect.value || origenPc.value;
   const destino = destinoSelect.value || destinoPc.value;
   const fecha = fechaInput.value || fechaPc.value;
@@ -126,8 +136,9 @@ function buscarClickHandler(event) {
       alert('Todos los campos deben estar llenos');
       return false;
   }
+  const url = `/res?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`;
 
-  window.location.href = `/res?origen=${origen}&destino=${destino}&fecha=${fecha}`;
+  window.location.href = url;
 }
 
 // Agregar el evento click para el botón de búsqueda en pantallas normales
@@ -137,6 +148,7 @@ buscarBtn.addEventListener('click', buscarClickHandler);
 if (buscarBtnPc) {
   buscarBtnPc.addEventListener('click', buscarClickHandler);
 }
+
 
   // Cargar rutas al cargar el DOM
   cargarRutas();
