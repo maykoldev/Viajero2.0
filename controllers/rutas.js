@@ -4,7 +4,7 @@ const Ruta = require('../models/ruta');
 
 // Endpoint para crear una nueva ruta (accesible solo por el administrador)
 rutasRouter.post('/', async (req, res) => {
-    const { nombre, origen, destino } = req.body; 
+    const { nombre, origen, destino, precio } = req.body; 
 
     try {
         // Verificar si el usuario que realiza la solicitud es un administrador
@@ -20,7 +20,8 @@ rutasRouter.post('/', async (req, res) => {
         const nuevaRuta = new Ruta({ 
           nombre, 
           origen, 
-          destino, 
+          destino,
+          precio,  
           createdBy: userId 
         });
 

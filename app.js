@@ -10,6 +10,7 @@ const path = require('path');
 const usersRouter = require('./controllers/users');
 const proveedoresRouter = require('./controllers/proveedores');
 const rutasRouter = require('./controllers/rutas');
+const pasajerosRouter = require('./controllers/pasajeros');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const { verificarAutenticacion } = require('./middleware/auth');
@@ -45,8 +46,6 @@ app.post('/api/logout', verificarAutenticacion, (req, res) => {
   });
 });
 
-app.get
-
 // Rutas frontend
 app.use('/', express.static(path.resolve('views', 'home')));
 app.use('/login', express.static(path.resolve('views', 'login')));
@@ -70,6 +69,8 @@ app.use(morgan('tiny'));
 app.use('/api/users', usersRouter);
 app.use('/api/proveedores', proveedoresRouter);
 app.use('/api/rutas', rutasRouter);
+app.use('/api/pasajeros', pasajerosRouter);
+
 
 
 module.exports = app;

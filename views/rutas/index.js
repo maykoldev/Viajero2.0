@@ -27,8 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const nombre = document.getElementById('nombre').value;
         const origen = document.getElementById('origen').value;
         const destino = document.getElementById('destino').value;
+        const precio = document.getElementById('precio').value;
 
-        if(!nombre||!origen||!destino){
+        if(!nombre||!origen||!destino||!precio){
             alert('Tonos los campos son Obligatorios')
             return;
         }
@@ -43,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     nombre,
                     origen,
                     destino,
+                    precio,
                 }),
                 credentials: 'include',
             });
@@ -100,18 +102,26 @@ document.addEventListener("DOMContentLoaded", function () {
     
         // Crear celdas (td) para cada propiedad de la ruta
         const celdaNombre = document.createElement('td');
+        celdaNombre.classList.add('text-center');
         celdaNombre.textContent = nuevaRuta.nombre;
     
         const celdaOrigen = document.createElement('td');
+        celdaOrigen.classList.add('text-center');
         celdaOrigen.textContent = nuevaRuta.origen;
     
         const celdaDestino = document.createElement('td');
+        celdaDestino.classList.add('text-center');
         celdaDestino.textContent = nuevaRuta.destino;
+
+        const celdaPrecio = document.createElement('td');
+        celdaPrecio.classList.add('text-center');
+        celdaPrecio.textContent = nuevaRuta.precio;
     
         // Agregar las celdas a la fila
         nuevaFila.appendChild(celdaNombre);
         nuevaFila.appendChild(celdaOrigen);
         nuevaFila.appendChild(celdaDestino);
+        nuevaFila.appendChild(celdaPrecio);
     
         // Agregar la nueva fila a la tabla existente
         listaRutas.appendChild(nuevaFila);
