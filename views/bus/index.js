@@ -138,13 +138,14 @@ asientosSeleccionados.onclick = function() {
       const nombreValue = nombre.value;
       const apellidoValue = apellido.value;
       const fechaNacValue = fechaNac.value;
+      const fechaFormateada = new Date(fechaNacValue).toISOString().split('T')[0];
       const generoValue = generoM.checked ? 'Masculino' : 'Femenino';
       const correoValue = correo.value;
       const telefonoValue = telefono.value;
       const telefonoRegex = /^[4][0-9]{9}$/;
       const emailRegex =
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
-  
+        console.log('Fecha de nacimiento:', fechaNacValue);
       if (
         !nombreValue ||
         !cedulaValue ||
@@ -175,7 +176,7 @@ asientosSeleccionados.onclick = function() {
         cedula: cedulaValue,
         nombre: nombreValue,
         apellido: apellidoValue,
-        fechaNac: fechaNacValue,
+        fechaNacimiento: fechaFormateada,
         genero: generoValue,
         correo: correoValue,
         telefono: telefonoValue,
@@ -192,7 +193,7 @@ asientosSeleccionados.onclick = function() {
       if (response.ok) {
         const data = await response.json();
         console.log('datos guardados correctamente', data);
-        form.reset();
+        
       } else {
         const errorMessage = await response.text();
         console.error('Error al agregar pasajero:', errorMessage);
@@ -201,8 +202,87 @@ asientosSeleccionados.onclick = function() {
     
   });
   
+  // Asignar eventos keyup a los campos
+    cedula.addEventListener('keyup', llenarCampos);
+    nombre.addEventListener('keyup', llenarCampos);
+    apellido.addEventListener('keyup', llenarCampos);
+    fechaNac.addEventListener('keyup', llenarCampos);
+    generoM.addEventListener('change', llenarCampos);
+    generoF.addEventListener('change', llenarCampos);
+    correo.addEventListener('keyup', llenarCampos);
+    telefono.addEventListener('keyup', llenarCampos);
+  
+    function llenarCampos() {
+      // Obtener el valor de la cédula del formulario actual
+      const cedulaValue = cedula.value;
+    
+      // Realizar una solicitud al servidor para obtener los datos del pasajero
+      fetch(`/api/pasajeros/${cedulaValue}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error al obtener datos del pasajero');
+        }
+      })
+      .then(data => {
+        // Verificar si la respuesta contiene datos del pasajero
+        if (Object.keys(data).length > 0) {
+          // Llenar los campos del formulario con los datos obtenidos
+          nombre.value = data.nombre || '';
+          apellido.value = data.apellido || '';
+          
+          // Convertir la fecha de formato ISO a "dd/mm/yyyy"
+          fechaNac.value = convertirFecha(data.fechaNacimiento);
+    
+          // Asignar el género según los datos obtenidos
+          generoM.checked = data.genero === 'Masculino';
+          generoF.checked = data.genero === 'Femenino';
+          correo.value = data.correo || '';
+          telefono.value = data.telefono || '';
+          // También puedes deshabilitar los botones de guardar, etc., si es necesario.
+        } else {
+          // No se encontró el pasajero, habilitar los campos para crear un nuevo pasajero
+          // Por ejemplo, puedes quitar el atributo 'disabled' de los campos
+          nombre.removeAttribute('disabled');
+          apellido.removeAttribute('disabled');
+          fechaNac.removeAttribute('disabled');
+          generoM.removeAttribute('disabled');
+          generoF.removeAttribute('disabled');
+          correo.removeAttribute('disabled');
+          telefono.removeAttribute('disabled');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        // No se encontró el pasajero, habilitar los campos para crear un nuevo pasajero
+        nombre.removeAttribute('disabled');
+        apellido.removeAttribute('disabled');
+        fechaNac.removeAttribute('disabled');
+        generoM.removeAttribute('disabled');
+        generoF.removeAttribute('disabled');
+        correo.removeAttribute('disabled');
+        telefono.removeAttribute('disabled');
+      });
+    }
+    
+    // Función para convertir la fecha de formato ISO a "dd/mm/yyyy"
+    function convertirFecha(fechaISO) {
+      const fecha = new Date(fechaISO);
+      const dia = fecha.getDate().toString().padStart(2, '0');
+      const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+      const anio = fecha.getFullYear();
+      return `${dia}/${mes}/${anio}`;
+    }
     }
   } 
+
+
 
   function showAlert(message) {
     alert(message);

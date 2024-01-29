@@ -23,6 +23,7 @@ pasajerosRouter.post('/', async (request, response) => {
           correo,
           telefono,
       });
+      console.log('Fecha de nacimiento:', nuevoPasajero.fechaNacimiento);
 
       const pasajeroGuardado = await nuevoPasajero.save();
 
@@ -31,6 +32,28 @@ pasajerosRouter.post('/', async (request, response) => {
       console.error(error);
       response.status(500).json({ error: 'Error al guardar el pasajero en la base de datos' });
   }
+});
+
+pasajerosRouter.get('/:cedula', async (req, res) => {
+    const cedula = req.params.cedula;
+
+    try {
+        // Buscar el pasajero por cédula
+        const pasajero = await Pasajero.findOne({ cedula });
+    
+        // Devolver los datos del pasajero o un objeto vacío si no se encuentra
+        res.status(200).json(pasajero || {
+            nombre: pasajero.nombre || '',
+            apellido: pasajero.apellido || '',
+            fechaNacimiento: pasajero.fechaNacimiento ? pasajero.fechaNacimiento.toISOString() : '',
+            genero: pasajero.genero || '',
+            correo: pasajero.correo || '',
+            telefono: pasajero.telefono || ''
+        });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener datos del pasajero de la base de datos' });
+      }
 });
 
 

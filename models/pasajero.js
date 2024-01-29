@@ -12,7 +12,7 @@ const pasajeroSchema = new mongoose.Schema({
     cedula:String,
     nombre:String,
     apellido:String,
-    fechaNacimiento:String,
+    fechaNacimiento:Date,
     genero:String,
     correo:String,
     telefono:String,

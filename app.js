@@ -11,6 +11,7 @@ const usersRouter = require('./controllers/users');
 const proveedoresRouter = require('./controllers/proveedores');
 const rutasRouter = require('./controllers/rutas');
 const pasajerosRouter = require('./controllers/pasajeros');
+const boletosRouter = require('./controllers/boletos');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const { verificarAutenticacion } = require('./middleware/auth');
@@ -30,21 +31,6 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
-
-
-// Ruta para cerrar sesión
-app.post('/api/logout', verificarAutenticacion, (req, res) => {
-  // Destruye la sesión
-  req.session.destroy((err) => {
-    if (err) {
-      console.error('Error al cerrar sesión:', err);
-      res.status(500).json({ error: 'Error al cerrar sesión' });
-    } else {
-      // Redirige al home o a la página de inicio de sesión
-      res.status(200).json({ message: 'Sesión cerrada exitosamente' });
-    }
-  });
-});
 
 // Rutas frontend
 app.use('/', express.static(path.resolve('views', 'home')));
@@ -70,6 +56,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/proveedores', proveedoresRouter);
 app.use('/api/rutas', rutasRouter);
 app.use('/api/pasajeros', pasajerosRouter);
+app.use('/api/boletos', boletosRouter);
 
 
 
