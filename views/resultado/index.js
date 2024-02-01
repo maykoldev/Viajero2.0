@@ -65,10 +65,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    listadoR.addEventListener('click', function (event) {
+    listadoR.addEventListener('click', async function (event) {
         if (event.target.classList.contains('btnSeleccionar')) {
             const proveedorId = event.target.getAttribute('data-proveedor-id');
-            seleccionarEmpresa(proveedorId);
+            await seleccionarEmpresa(proveedorId);
         }
     });
 
@@ -84,9 +84,27 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Redirigir a la página de selección de asientos
         window.location.href = '/seat';
     }
-    
 
+    // Puedes agregar esta función en la misma sección de tu archivo index.js
+async function obtenerDetalleEmpresa(proveedorId) {
+    try {
+        const response = await fetch(`/api/detalle-empresa?id=${encodeURIComponent(proveedorId)}`);
+        if (response.ok) {
+            const detalleEmpresa = await response.json();
+            return detalleEmpresa;
+        } else {
+            console.error('Error al obtener detalle de la empresa.');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error de red al obtener detalle de la empresa:', error);
+        return null;
+    }
+}
+
+    
 });
+
 
 
 

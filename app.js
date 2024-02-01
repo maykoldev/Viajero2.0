@@ -18,6 +18,7 @@ const detalleRutaRouter = require('./controllers/detalleRutaRouter');
 
 
 
+
 (async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI_TEST);
@@ -62,6 +63,7 @@ app.use('/api/rutas', rutasRouter);
 app.use('/api/pasajeros', pasajerosRouter);
 app.use('/api/boletos', boletosRouter);
 app.use('/api/ruta-detalle', detalleRutaRouter);
+
 
 
 

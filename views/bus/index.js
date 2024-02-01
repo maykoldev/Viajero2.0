@@ -322,6 +322,7 @@ asientosSeleccionados.onclick = function() {
     alert(message);
   }
 
+
 });
 
 
