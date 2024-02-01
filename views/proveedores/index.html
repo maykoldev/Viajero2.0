@@ -76,10 +76,10 @@
         <div class="bg-white p-8 rounded-lg w-1/2">
             <h1 class="text-2xl text-center font-bold mb-4">Agregar Proveedor</h1>
             <!-- Formulario para agregar proveedor -->
-            <form id="formAgregarProveedor" class="font-semibold flex flex-col gap-2">
+            <form id="formAgregarProveedor" enctype="multipart/form-data" class="font-semibold flex flex-col gap-2">
 
                 <label for="logoProveedor">Logo de la empresa:</label>
-                <input type="file" id="logoProveedor" name="logoProveedor" accept="image/*" class="bg-blue-100 outline rounded-md focus:outline-green-700 outline-2 ">
+                <input type="file" id="logoProveedor" name="logo" accept="image/*" class="bg-blue-100 outline rounded-md focus:outline-green-700 outline-2 ">
 
                 <label for="razonSocial">Razon Social:</label>
                 <input type="text" id="razonSocial" name="razonSocial" required class=" bg-blue-100 outline rounded-md focus:outline-green-700 outline-2">
@@ -92,7 +92,7 @@
                     <option value="">Seleccione</option>
                 </select>
 
-                <label for="fecha">Fecha de salida</label>
+                <label for="fechaP">Fecha de salida</label>
               <div class=" w-full m-auto rounded-lg">
                 <input type="date" id="fechaP" name="fecha" class="w-full rounded-lg h-11">
               </div>

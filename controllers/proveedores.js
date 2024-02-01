@@ -1,37 +1,58 @@
-const proveedoresRouter = require('express').Router(); 
-const Proveedor = require('../models/proveedor'); 
+const proveedoresRouter = require('express').Router();
+const Proveedor = require('../models/proveedor');
+const multer = require('multer');
+const storage = multer.memoryStorage();
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024, // Limitar el tamaño del archivo (en bytes) a 5 MB
+    },
+}).single('logo');
 
 proveedoresRouter.post('/', async (request, response) => {
-  const { razonSocial, rif, ruta, fecha, telefono, correo, porcentajeGanancia } = request.body;
+    try {
+        upload(request, response, async (err) => {
+            if (err) {
+                console.error('Error al cargar el archivo:', err);
+                return response.status(500).json({ error: 'Error al cargar el archivo' });
+            }
 
-  try {
-      // Verificar si el RIF ya está registrado
-      const existingProveedor = await Proveedor.findOne({ rif });
+            const { razonSocial, rif, ruta, fecha, telefono, correo, porcentajeGanancia } = request.body;
 
-      if (existingProveedor) {
-          // Si el RIF ya está registrado, devolver un error
-          return response.status(400).json({ error: 'El RIF ya está registrado para un proveedor' });
-      }
+            try {
+                // Verificar si el RIF ya está registrado
+                const existingProveedor = await Proveedor.findOne({ rif });
 
-      // Si el RIF no está registrado, crear un nuevo proveedor
-      const nuevoProveedor = new Proveedor({
-          logo,
-          razonSocial,
-          rif,
-          ruta,       
-          fecha,      
-          telefono,
-          correo,
-          porcentajeGanancia,
-      });
+                if (existingProveedor) {
+                    // Si el RIF ya está registrado, devolver un error
+                    return response.status(400).json({ error: 'El RIF ya está registrado para un proveedor' });
+                }
 
-      const proveedorGuardado = await nuevoProveedor.save();
+                // Si el RIF no está registrado, crear un nuevo proveedor
+                const nuevoProveedor = new Proveedor({
+                    logo: request.file ? request.file.buffer : null,
+                    razonSocial,
+                    rif,
+                    ruta,
+                    fecha,
+                    telefono,
+                    correo,
+                    porcentajeGanancia,
+                });
 
-      response.status(201).json(proveedorGuardado);
-  } catch (error) {
-      console.error(error);
-      response.status(500).json({ error: 'Error al guardar el proveedor en la base de datos' });
-  }
+                const proveedorGuardado = await nuevoProveedor.save();
+
+                response.status(201).json(proveedorGuardado);
+            } catch (error) {
+                console.error(error);
+                response.status(500).json({ error: 'Error al guardar el proveedor en la base de datos' });
+            }
+        });
+    } catch (error) {
+        console.error('Error al procesar la solicitud:', error);
+        response.status(500).json({ error: 'Error interno del servidor' });
+    }
 });
 
 
@@ -53,24 +74,29 @@ proveedoresRouter.put('/:id', async (req, res) => {
   const { razonSocial, rif, ruta, fecha, telefono, correo, porcentajeGanancia } = req.body;
 
   try {
-    // Asumiendo que Proveedor.findByIdAndUpdate es una función de Mongoose para actualizar
-    const updatedProveedor = await Proveedor.findByIdAndUpdate(id, {
-      logo,
-      razonSocial,
-      rif,
-      ruta,
-      fecha,
-      telefono,
-      correo,
-      porcentajeGanancia,
-    }, { new: true });
+    const proveedor = await Proveedor.findById(id);
 
-    if (!updatedProveedor) {
-      return res.status(404).json({ error: 'Proveedor no encontrado' });
+    if (!proveedor) {
+        return res.status(404).json({ error: 'Proveedor no encontrado' });
     }
 
-    // Envía la respuesta con el proveedor actualizado
-    res.json(updatedProveedor);
+    // Actualizar propiedades del proveedor
+    proveedor.razonSocial = razonSocial;
+    proveedor.rif = rif;
+    proveedor.ruta = ruta;
+    proveedor.fecha = fecha;
+    proveedor.telefono = telefono;
+    proveedor.correo = correo;
+    proveedor.porcentajeGanancia = porcentajeGanancia;
+
+    // Actualizar el logo solo si se proporciona un nuevo archivo
+    if (req.file) {
+        proveedor.logo = req.file.buffer;
+    }
+
+    const proveedorActualizado = await proveedor.save();
+
+    res.json(proveedorActualizado);
   } catch (error) {
     console.error('Error al actualizar proveedor:', error);
     res.status(500).json({ error: 'Error interno del servidor' });

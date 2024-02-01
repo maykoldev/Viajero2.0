@@ -16,9 +16,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Agrega un evento de clic al botón "Cerrar" en la ventana emergente
     cerrarRButton.addEventListener('click', function () {
+        // Verificar si el formulario es válido antes de cerrar
+    if (formulario.checkValidity()) {
         // Oculta la ventana emergente cambiando la clase de 'flex' a 'hidden'
         modalAgregarRutas.classList.remove('flex');
         modalAgregarRutas.classList.add('hidden');
+    } else {
+        // Si el formulario no es válido, mostrar un mensaje de error o realizar otra acción según tus necesidades
+        alert('Por favor, complete todos los campos obligatorios.');
+    }
     });
 
     // Agrega un evento de clic al botón "Guardar Rutas"

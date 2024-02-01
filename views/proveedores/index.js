@@ -16,8 +16,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const guardar = document.getElementById("guardarP");
   const cerrarForm = document.getElementById("cerrarF");
   const listaProveedoresContainer = document.getElementById('listadoP');
-  const logoEmpresaInput = document.getElementById("logoEmpresa");
-  const logoPreview = document.getElementById("logoPreview");
+  const logoEmpresaInput = document.getElementById("logoProveedor");
+ 
+  
 
   function checkParent(t, elm) {
     while (t.parentNode) {
@@ -68,95 +69,96 @@ document.addEventListener("DOMContentLoaded", function () {
 
   guardar.addEventListener("click", async () => {
     try {
-      const razonSocialValue = razonS.value;
-      const rifValue = rif.value;
-      const rutaValue = ruta.value;
-      const fechaValue = fecha.value;
-      const telefonoValue = telefono.value;
-      const correoValue = correo.value;
-      const gananciaValue = ganancia.value;
-      const rifRegex = /^[VEJPG]-\d{8}-\d$/;
-      const telefonoRegex = /^[4][0-9]{9}$/;
-      const emailRegex =
-        /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
-  
-      if (
-        !razonSocialValue ||
-        !rifValue ||
-        !rutaValue ||
-        !fechaValue ||
-        !telefonoValue ||
-        !correoValue ||
-        !gananciaValue
-      ) {
-        showAlert("Completa todos los campos antes de agregar al proveedor.");
-        return;
-      }
-  
-      if (!emailRegex.test(correoValue)) {
-        showAlert("Formato de correo inválido.");
-        return;
-      }
-  
-      if (!rifRegex.test(rifValue)) {
-        showAlert("Formato de RIF no válido. Debe tener el formato correcto.");
-        return;
-      }
-  
-      if (!telefonoRegex.test(telefonoValue)) {
-        showAlert(
-          "Formato de número de teléfono no válido. Debe ser un número venezolano."
-        );
-        return;
-      }
-  
-      const formData = new FormData();
-      formData.append("razonSocial", razonSocialValue);
-      formData.append("rif", rifValue);
-      formData.append("ruta", rutaValue);
-      formData.append("fecha", fechaValue);
-      formData.append("telefono", telefonoValue);
-      formData.append("correo", correoValue);
-      formData.append("porcentajeGanancia", gananciaValue);
-  
-      // Verificar si logoEmpresaInput no es null y si tiene la propiedad 'files'
-      if (logoEmpresaInput && logoEmpresaInput.files && logoEmpresaInput.files.length > 0) {
-        formData.append("logoEmpresa", logoEmpresaInput.files[0]);
-    } else {
-        console.error("El input del logo de la empresa está vacío o no es válido.");
-        showAlert("Error al obtener el logo de la empresa. Asegúrate de seleccionar un archivo.");
-        return;
-    }
-    
-  
-      const response = await fetch("/api/proveedores", {
-        method: "POST",
-        body: formData,
-      });
-  
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Datos guardados correctamente:', data);
-  
-        formulario.reset();
-  
-        modalAgregarProveedor.classList.remove('flex');
-        modalAgregarProveedor.classList.add("hidden");
-  
-        cargarListaProveedores();
+        const razonSocialValue = razonS.value;
+        const rifValue = rif.value;
+        const rutaValue = ruta.value;
+        const fechaValue = fecha.value;
+        const telefonoValue = telefono.value;
+        const correoValue = correo.value;
+        const gananciaValue = ganancia.value;
+        const rifRegex = /^[VEJPG]-\d{8}-\d$/;
+        const telefonoRegex = /^[4][0-9]{9}$/;
+        const emailRegex =
+            /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
 
-        if (data.is){
-          await cargarDetallesProveedores(data.id);
+        if (
+            !razonSocialValue ||
+            !rifValue ||
+            !rutaValue ||
+            !fechaValue ||
+            !telefonoValue ||
+            !correoValue ||
+            !gananciaValue
+        ) {
+            showAlert("Completa todos los campos antes de agregar al proveedor.");
+            return;
         }
-      } else {
-        const errorMessage = await response.text();
-        showAlert(`Error al agregar el proveedor: ${errorMessage}`);
-      }
+
+        if (!emailRegex.test(correoValue)) {
+            showAlert("Formato de correo inválido.");
+            return;
+        }
+
+        if (!rifRegex.test(rifValue)) {
+            showAlert("Formato de RIF no válido. Debe tener el formato correcto.");
+            return;
+        }
+
+        if (!telefonoRegex.test(telefonoValue)) {
+            showAlert(
+                "Formato de número de teléfono no válido. Debe ser un número venezolano."
+            );
+            return;
+        }
+
+        // Verificar si logoEmpresaInput no es null y si tiene la propiedad 'files'
+        const logoEmpresaFile = logoEmpresaInput.files ? logoEmpresaInput.files[0] : null;
+
+        if (!logoEmpresaFile) {
+            console.error("El input del logo de la empresa está vacío o no es válido.");
+            showAlert("Error al obtener el logo de la empresa. Asegúrate de seleccionar un archivo.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("razonSocial", razonSocialValue);
+        formData.append("rif", rifValue);
+        formData.append("ruta", rutaValue);
+        formData.append("fecha", fechaValue);
+        formData.append("telefono", telefonoValue);
+        formData.append("correo", correoValue);
+        formData.append("porcentajeGanancia", gananciaValue);
+        formData.append("logo", logoEmpresaInput.files[0]);
+
+        const response = await fetch("/api/proveedores", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Datos guardados correctamente:', data);
+
+            formulario.reset();
+
+            modalAgregarProveedor.classList.remove('flex');
+            modalAgregarProveedor.classList.add("hidden");
+
+            cargarListaProveedores();
+
+            if (data.is) {
+                await cargarDetallesProveedores(data.id);
+            }
+        } else {
+            const errorMessage = await response.text();
+            showAlert(`Error al agregar el proveedor: ${errorMessage}`);
+        }
     } catch (error) {
-      console.error("Error durante la solicitud:", error);
-      showAlert("Error al procesar la solicitud.");
+        console.error("Error durante la solicitud:", error);
+        showAlert("Error al procesar la solicitud.");
     }
-  });
+});
+
   
 
   function showAlert(message) {
@@ -256,7 +258,16 @@ document.addEventListener("DOMContentLoaded", function () {
       const telefonoValue = telefono.value;
       const correoValue = correo.value;
       const gananciaValue = ganancia.value;
-
+  
+      // Verificar si logoEmpresaInput no es null y si tiene la propiedad 'files'
+      const logoEmpresaFile = logoEmpresaInput.files ? logoEmpresaInput.files[0] : null;
+  
+      if (!logoEmpresaFile) {
+        console.error("El input del logo de la empresa está vacío o no es válido.");
+        showAlert("Error al obtener el logo de la empresa. Asegúrate de seleccionar un archivo.");
+        return;
+      }
+  
       // Realizar la solicitud al servidor para actualizar el proveedor
       const formData = new FormData();
       formData.append("razonSocial", razonSocialValue);
@@ -266,27 +277,29 @@ document.addEventListener("DOMContentLoaded", function () {
       formData.append("telefono", telefonoValue);
       formData.append("correo", correoValue);
       formData.append("porcentajeGanancia", gananciaValue);
-      formData.append("logoEmpresa", logoEmpresaInput.files[0]);
+      formData.append("logoEmpresa", logoEmpresaFile);
 
+      console.log('contenido formData', formData);
+  
       const response = await fetch(`/api/proveedores/${id}`, {
         method: "PUT",
         body: formData,
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log('Proveedor actualizado correctamente:', data);
-
+  
         // Resetear el formulario
         formulario.reset();
-
+  
         // Ocultar el modal de agregar proveedor (editar)
         modalAgregarProveedor.classList.remove('flex');
         modalAgregarProveedor.classList.add("hidden");
-
+  
         // Recargar la lista de proveedores
         cargarListaProveedores();
-
+  
         // Cargar detalles del proveedor actualizado
         await cargarDetallesProveedor(data.id); 
       } else {
@@ -298,6 +311,7 @@ document.addEventListener("DOMContentLoaded", function () {
       showAlert("Error al procesar la solicitud.");
     }
   }
+  
 
   async function eliminarProveedor(id) {
     const confirmacion = confirm('¿Estás seguro de eliminar este proveedor?');
@@ -328,18 +342,38 @@ document.addEventListener("DOMContentLoaded", function () {
   async function cargarDetallesProveedor(id) {
     try {
       const response = await fetch(`/api/proveedores/${id}`);
-      if (response.ok) {
-        const proveedor = await response.json();
-        return proveedor; // Devolver el proveedor cargado
-      } else {
-        console.error("Error al cargar detalles del proveedor.");
-        throw new Error("Error al cargar detalles del proveedor");
+      const proveedor = await response.json();
+  
+      // Llenar los campos del formulario con los detalles del proveedor
+      razonS.value = proveedor.razonSocial;
+      rif.value = proveedor.rif;
+      ruta.value = proveedor.ruta;
+      fecha.value = proveedor.fecha;
+      telefono.value = proveedor.telefono;
+      correo.value = proveedor.correo;
+      ganancia.value = proveedor.porcentajeGanancia;
+  
+      // Verificar y llenar el campo del logo de la empresa si hay datos
+      if (proveedor.logo) {
+        // Crear un Blob con los datos del logo
+        const blob = new Blob([proveedor.logo.buffer], { type: proveedor.logo.contentType });
+  
+        // Crear un objeto File a partir del Blob
+        const file = new File([blob], 'logo.png', { type: proveedor.logo.contentType });
+  
+        // Asignar el archivo al input del logo de la empresa
+        logoEmpresaInput.files = [file];
       }
+  
+      // Mostrar el modal de editar proveedor
+      modalAgregarProveedor.classList.remove('hidden');
+      modalAgregarProveedor.classList.add('flex');
     } catch (error) {
-      console.error("Error durante la solicitud:", error);
-      throw error;
+      console.error('Error al cargar detalles del proveedor:', error);
+      showAlert('Error al cargar detalles del proveedor.');
     }
   }
+  
 
   async function cargarNombresR() {
     const selectElement = document.getElementById("nombreR");

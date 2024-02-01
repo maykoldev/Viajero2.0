@@ -9,6 +9,14 @@ var nuevoFormulario;
 var contadorFormularios = 0;
 var cedula, nombre, apellido, fechaNac, genero, correo, telefono, form;
 
+const empresaSeleccionada =JSON.parse(sessionStorage.getItem('empresaSeleccionada'));
+
+// Realizar acciones según sea necesario con la empresaSeleccionada
+console.log('Detalles de la empresa seleccionada:', empresaSeleccionada);
+
+// Restaurar sessionStorage después de usarlo si es necesario
+sessionStorage.removeItem('empresaSeleccionada');
+
 Array.from(asientos).forEach(asiento => {
   asiento.onclick = function() {
     
@@ -245,10 +253,10 @@ asientosSeleccionados.onclick = function() {
           generoF.checked = data.genero === 'Femenino';
           correo.value = data.correo || '';
           telefono.value = data.telefono || '';
-          // También puedes deshabilitar los botones de guardar, etc., si es necesario.
+          
         } else {
           // No se encontró el pasajero, habilitar los campos para crear un nuevo pasajero
-          // Por ejemplo, puedes quitar el atributo 'disabled' de los campos
+          
           nombre.removeAttribute('disabled');
           apellido.removeAttribute('disabled');
           fechaNac.removeAttribute('disabled');
@@ -282,6 +290,32 @@ asientosSeleccionados.onclick = function() {
     }
   } 
 
+  const ventanaMetodosPago = document.getElementById('ventanaMetodosPago');
+    const cerrarVentanaPago = document.getElementById('cerrarVentanaPago');
+
+    // Agregar listener a los botones "Siguiente" generados dinámicamente
+    document.addEventListener('click', function (event) {
+        if (event.target.id && event.target.id.startsWith('guardarPas')) {
+            const botonSiguiente = event.target;
+            const formIndex = botonSiguiente.id.replace('guardarPas', '');
+            
+            // Mostrar la ventana emergente de métodos de pago
+            mostrarVentanaMetodosPago(formIndex);
+        }
+    });
+
+    cerrarVentanaPago.addEventListener('click', function () {
+        // Cerrar la ventana emergente de métodos de pago
+        ventanaMetodosPago.classList.add('hidden');
+    });
+
+    function mostrarVentanaMetodosPago(formIndex) {
+        // Lógica para mostrar la ventana de métodos de pago según el índice del formulario
+        console.log('Mostrar ventana de métodos de pago para el formulario:', formIndex);
+
+        // Puedes personalizar esta lógica según tus necesidades
+        ventanaMetodosPago.classList.remove('hidden');
+    }
 
 
   function showAlert(message) {

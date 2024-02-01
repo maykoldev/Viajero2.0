@@ -14,7 +14,9 @@ const pasajerosRouter = require('./controllers/pasajeros');
 const boletosRouter = require('./controllers/boletos');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
-const { verificarAutenticacion } = require('./middleware/auth');
+const detalleRutaRouter = require('./controllers/detalleRutaRouter');
+
+
 
 (async () => {
   try {
@@ -35,6 +37,7 @@ app.use(session({
 // Rutas frontend
 app.use('/', express.static(path.resolve('views', 'home')));
 app.use('/login', express.static(path.resolve('views', 'login')));
+app.use('/logAdmin', express.static(path.resolve('views', 'login')));
 app.use('/registro', express.static(path.resolve('views', 'register')));
 app.use('/componentes', express.static(path.resolve('views', 'componentes')));
 app.use('/img', express.static(path.resolve('img')));
@@ -44,6 +47,7 @@ app.use('/seat', express.static(path.resolve('views', 'bus')));
 app.use('/proveedor', express.static(path.resolve('views', 'proveedores')));
 app.use('/confirmar', express.static(path.resolve('views', 'confirmacion')));
 app.use('/rutas', express.static(path.resolve('views', 'rutas')));
+app.use('/ruta-protegida', express.static(path.resolve('views', 'protegido')));
 
 // IMPORTANTE
 app.use(express.json());
@@ -57,6 +61,7 @@ app.use('/api/proveedores', proveedoresRouter);
 app.use('/api/rutas', rutasRouter);
 app.use('/api/pasajeros', pasajerosRouter);
 app.use('/api/boletos', boletosRouter);
+app.use('/api/ruta-detalle', detalleRutaRouter);
 
 
 

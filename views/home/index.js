@@ -1,155 +1,158 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  let usuarioLogueado = false;
-  console.log("Usuario Logueado (inicial):", usuarioLogueado);
-  crearNavHome(usuarioLogueado);
-  const origenSelect = document.getElementById('origenM');
-  const destinoSelect = document.getElementById('destinoM');
-  const fechaInput = document.getElementById('fechaM');
-  const buscarBtn = document.getElementById('buscar-ruta');
-  const origenPc = document.getElementById('origen');
-  const destinoPc = document.getElementById('destino');
-  const fechaPc = document.getElementById('fecha');
-  const buscarBtnPc = document.getElementById('buscar-ruta-pc');
-  const userMenu = document.getElementById('userButton');
+    const origenInput = document.getElementById('origen');
+    const destinoInput = document.getElementById('destino');
+    const fechaInput = document.getElementById('fecha');
+    const buscarBtn = document.getElementById('buscar-ruta');
+    const userMenu = document.getElementById('userButton');
+    const sugerenciasOrigen = document.getElementById('sugerenciasOrigen');
+    const sugerenciasDestino = document.getElementById('sugerenciasDestino');
   
-  /*const userMenuDiv = document.getElementById('userMenu');
-  const enlaceSalir = document.getElementById('cerrarS');
-
-  userMenu.addEventListener('click', function (e) {
-    e.stopPropagation();
-    userMenuDiv.classList.toggle('invisible');
-  });
-  // Cierra el menú si se hace clic fuera de él
-  document.addEventListener("click", function () {
-    userMenuDiv.classList.add("invisible");
-  });
-  async function cerrarSesionEnServidor() {
-    console.log('intentando cerrar sesion en servidor')
-    try {
-      const response = await fetch('/api/logout', {
-        method: 'POST',
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-
-        usuarioLogueado = false;
-        return true;
-      } else {
-        console.error('Error al cerrar sesión en el servidor:', response.statusText);
-        return false;
-      }
-    } catch (error) {
-      console.error('Error al cerrar sesión en el servidor:', error);
-      return false;
-    }
-  }
-
-  // Agrega el evento de clic al enlace "Salir"
-if (enlaceSalir) {
-    enlaceSalir.addEventListener('click', async function (e) {
-        e.preventDefault();
-
-        try {
-            const cerrarSesionExitosa = await cerrarSesionEnServidor();
-
-            if (cerrarSesionExitosa) {
-                window.location.href = '/';
-            } else {
-                alert('Error al cerrar sesión. Por favor, inténtalo de nuevo.');
-            }
-        } catch (error) {
-            console.error('Error en enlaceSalir.addEventListener:', error);
+    // Obtener todas las rutas desde el servidor
+    async function obtenerRutas() {
+      try {
+        const response = await fetch("/api/rutas");
+        if (response.ok) {
+          const rutas = await response.json();
+          return rutas;
+        } else {
+          console.error('Error al obtener las rutas existentes.');
+          return [];
         }
-    });
-} else {
-    console.error('Elemento con ID "cerrarS" no encontrado.');
-}*/
-
-
-  // Función para cargar las rutas existentes
-  async function cargarRutas() {
-    try {
-      const response = await fetch("/api/rutas");
-      if (response.ok) {
-        const rutas = await response.json();
-        console.log('Rutas existentes:', rutas);
-
-        // Llenar las opciones de origen y destino
-        llenarOpciones(rutas);
-      } else {
-        console.error('Error al obtener las rutas existentes.');
+      } catch (error) {
+        console.error('Error de red al obtener las rutas existentes:', error);
+        return [];
       }
-    } catch (error) {
-      console.error('Error de red al obtener las rutas existentes:', error);
     }
-  }
-
-  // Función para llenar las opciones de origen y destino
-  function llenarOpciones(rutas) {
-    // Limpiar opciones anteriores si las hay
-    origenSelect.innerHTML = '';
-    destinoSelect.innerHTML = '';
-
-    // Crear opciones basadas en las rutas existentes
-    rutas.forEach(ruta => {
-      // Crear opción para origenMovil
-      const opcionOrigen = document.createElement('option');
-      opcionOrigen.value = ruta.origen;
-      opcionOrigen.textContent = ruta.origen;
-      origenSelect.appendChild(opcionOrigen);
-
-      // Crear opción para destinoMovil
-      const opcionDestino = document.createElement('option');
-      opcionDestino.value = ruta.destino;
-      opcionDestino.textContent = ruta.destino;
-      destinoSelect.appendChild(opcionDestino);
-
-      // Crear opción para origenPc
-      const optionOrigen = document.createElement('option');
-      optionOrigen.value = ruta.origen;
-      optionOrigen.textContent = ruta.origen;
-      origenPc.appendChild(optionOrigen);
-
-      // Crear opción para destinopc
-      const optionDestino = document.createElement('option');
-      optionDestino.value = ruta.destino;
-      optionDestino.textContent = ruta.destino;
-      destinoPc.appendChild(optionDestino);
+  
+    // Obtener todas las rutas al cargar el DOM
+    const todasLasRutas = await obtenerRutas();
+  
+    // Obtener opciones de origen y destino
+    const opcionesOrigen = [...new Set(todasLasRutas.map(ruta => ruta.origen))];
+    const opcionesDestino = [...new Set(todasLasRutas.map(ruta => ruta.destino))];
+  
+    // Función para filtrar sugerencias y mostrarlas
+    function mostrarSugerencias(event, opciones, sugerenciasElement, inputElement) {
+      const inputValue = event.target.value.toLowerCase();
+      const sugerencias = opciones.filter(opcion =>
+        opcion.toLowerCase().includes(inputValue)
+      );
+  
+      // Limpiar sugerencias anteriores
+      sugerenciasElement.innerHTML = '';
+  
+      // Mostrar las nuevas sugerencias
+      sugerencias.forEach(sugerencia => {
+        const li = document.createElement('li');
+        li.textContent = sugerencia;
+        li.addEventListener('click', () => {
+          inputElement.value = sugerencia;
+          sugerenciasElement.innerHTML = '';
+        });
+        sugerenciasElement.appendChild(li);
+      });
+    }
+  
+    // Evento de entrada para campo de origen
+    origenInput.addEventListener('input', function (event) {
+      mostrarSugerencias(event, opcionesOrigen, sugerenciasOrigen, origenInput);
+      origenInput.classList.add('uppercase', 'text-center', 'text-blue-800');
     });
-  }
+  
+    // Evento de entrada para campo de destino
+    destinoInput.addEventListener('input', function (event) {
+      mostrarSugerencias(event, opcionesDestino, sugerenciasDestino, destinoInput);
+      destinoInput.classList.add('uppercase', 'text-center', 'text-blue-800');
+    });
+  
+    // Función que se ejecutará cuando se haga clic en el botón de búsqueda
+  async function buscarClickHandler(event) {
+    event.preventDefault();
 
-  // Función que se ejecutará cuando se haga clic en los botones de búsqueda
-function buscarClickHandler(event) {
-  event.preventDefault();
+    const origen = origenInput.value;
+    const destino = destinoInput.value;
+    const fecha = fechaInput.value;
 
-  if(!usuarioLogueado){
-    window.location.href = '/login'; 
-    return;
-  }
-
-  const origen = origenSelect.value || origenPc.value;
-  const destino = destinoSelect.value || destinoPc.value;
-  const fecha = fechaInput.value || fechaPc.value;
-
-  if (!origen || !destino || !fecha) {
+    if (!origen || !destino || !fecha) {
       alert('Todos los campos deben estar llenos');
       return false;
+    }
+
+    // Realizar una consulta a la base de datos para verificar la existencia de proveedores
+    const proveedoresDisponibles = await verificarExistenciaProveedor(origen, destino, fecha);
+
+    if (proveedoresDisponibles.length > 0) {
+      // Redirigir al usuario a la vista de resultados
+      const url = `/res?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`;
+      window.location.href = url;
+    } else {
+      alert('No hay proveedores disponibles para la ruta y fecha seleccionadas.');
+    }
   }
-  const url = `/res?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`;
 
-  window.location.href = url;
-}
+  // Agregar el evento click para el botón de búsqueda
+  buscarBtn.addEventListener('click', buscarClickHandler);
 
-// Agregar el evento click para el botón de búsqueda en pantallas normales
-buscarBtn.addEventListener('click', buscarClickHandler);
+  async function verificarExistenciaProveedor(origen, destino, fecha) {
+    try {
+      const response = await fetch(`/api/proveedores?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`);
+      if (response.ok) {
+        const proveedores = await response.json();
+        return proveedores;
+      } else {
+        console.error('Error al verificar la existencia de proveedores.');
+        return [];
+      }
+    } catch (error) {
+      console.error('Error de red al verificar la existencia de proveedores:', error);
+      return [];
+    }
+  }
 
-// Agregar el evento click para el botón de búsqueda en pantallas grandes
-if (buscarBtnPc) {
-  buscarBtnPc.addEventListener('click', buscarClickHandler);
-}
+  // Obtener los parámetros de la URL para obtener y mostrar los resultados
+  const urlParams = new URLSearchParams(window.location.search);
+  const origenParam = urlParams.get('origen');
+  const destinoParam = urlParams.get('destino');
+  const fechaParam = urlParams.get('fecha');
 
+  if (origenParam && destinoParam && fechaParam) {
+    // Realizar una consulta al servidor para obtener los resultados y mostrarlos en la página
+    const resultados = await obtenerResultados(origenParam, destinoParam, fechaParam);
+    mostrarResultados(resultados);
+  }
 
-  // Cargar rutas al cargar el DOM
-  cargarRutas();
+  async function obtenerResultados(origen, destino, fecha) {
+    try {
+      const response = await fetch(`/api/proveedores?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`);
+      if (response.ok) {
+        const proveedores = await response.json();
+        return proveedores;
+      } else {
+        console.error('Error al obtener resultados de proveedores.');
+        return [];
+      }
+    } catch (error) {
+      console.error('Error de red al obtener resultados de proveedores:', error);
+      return [];
+    }
+  }
+
+  function mostrarResultados(resultados) {
+    const listadoR = document.getElementById('listadoR');
+
+    // Limpiar resultados anteriores
+    listadoR.innerHTML = '';
+
+    // Mostrar los nuevos resultados
+    resultados.forEach(proveedor => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${proveedor.razonSocial}</td>
+        <td>${proveedor.ruta}</td>
+        <td>${proveedor.fecha}</td>
+        <!-- Agrega más columnas según la información que desees mostrar -->
+      `;
+      listadoR.appendChild(tr);
+    });
+  }
 });

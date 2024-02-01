@@ -17,7 +17,6 @@ const proveedorSchema = new mongoose.Schema({
     telefono: String,               // Teléfono del proveedor
     correo: String,                 // Correo electrónico del proveedor
     porcentajeGanancia: String,     // Porcentaje de ganancia del proveedor
-    // Puedes agregar más campos según las necesidades de tu aplicación
 });
 
 // Configurar la transformación de la respuesta del proveedor al formato deseado

@@ -46,27 +46,43 @@
                 </div>
             </div>
 
-            <!-- Logo y Detalles -->
-            <div class="flex mt-2 gap-4 ">
-                <div class="border-2 border-blue-950">
-                    <button id="seleccionarBtn" class="text-xs text-gray-400">
-                        <img src="/img/LOGO2.png" alt="" class="w-24 pt-3">
-                    </button>
-                </div>
-
-                <!-- Detalles -->
-                <div class="border-2 border-blue-950 flex gap-4 w-full justify-center items-center rounded-md text-center">
-                    <div class="w-1/4 -mt-8">
-                        <span>Hora</span>
+            <div class="flex flex-col mt-auto w-auto  ">
+                    <div class="py-2 overflow-x-auto flex justify-center">
+                        <div class="align-middle inline-block shadow  rounded-md overflow-hidden sm:rounded-lg border-b border-gray-200 md:w-full md:mx-2">
+                            <table class="min-w-min md:w-full md:text-center">
+                                <thead class="bg-gray-100 ">
+                                    <tr>
+                                        <th class="px-6 py-3 border-b  border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                            empresa
+                                        </th>
+                                        <th class="px-6 py-3 border-b  border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                                origen
+                                        </th>
+                                        <th class="px-6 py-3 border-b  border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                                destino
+                                        </th>
+                                        <th class="px-6 py-3 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                                fecha
+                                        </th>
+                                        <th class="px-6 py-3 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                            precio
+                                        </th>
+                                        <th class="px-6 py-3 border-b border-gray-200 text-left text-xs leading-4 font-medium text-gray-600 uppercase tracking-wider">
+                                            seleccionar
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="listadoR" class="bg-white">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="w-1/4 -mt-8">
-                        <span>Calificación</span>
-                    </div>
-                    <div class="w-1/4 -mt-8">
-                        <span>Precio</span>
-                    </div>
-                </div>
             </div>
+  <!-- Logo y Detalles -->
+  
+            <tbody id="resultadoBusqueda" class="flex mt-2 mx-2 gap-4 ">
+
+            </tbody>
         </div>
     </div>
 

@@ -108,30 +108,23 @@ usersRouter.get('/confirmar/:confirmationCode', async (request, response) => {
 usersRouter.post('/login', async (request, response) => {
   try {
     const { email, password } = request.body;
-    console.log('buscando usuario en la base de datos', email);
     const user = await User.findOne({ email });
-    console.log('usuario encontrado', user);
-
 
     if (!user) {
       return response.status(404).json({ error: 'El usuario no existe' });
     }
 
-    // Verificar la contraseña utilizando bcrypt
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (passwordMatch) {
-      /* Establece la variable usuarioLogueado a true
-      let usuarioLogueado = true;
-
-      // Llama a la función para actualizar la interfaz
-      crearNavHome(usuarioLogueado);*/
+      // Si el usuario es administrador, redirigir al panel de administrador
+      if (user.isAdmin) {
+        return response.status(200).json({ isAdmin: true, redirectTo: '/admon' });
+      }
 
       // Almacena el ID del usuario en la sesión
       request.session.userId = user.id;
-
       return response.status(200).json({ redirectTo: '/' });
-
     } else {
       return response.status(401).json({ error: 'Credenciales incorrectas' });
     }
@@ -141,32 +134,6 @@ usersRouter.post('/login', async (request, response) => {
   }
 });
 
-// Ruta de inicio de sesión para el administrador
-usersRouter.post('/admon/login', async (request, response) => {
-  try {
-    const { email, password } = request.body;
-    console.log('intentando iniciar sesion con:', email, password);
-
-    if (email !== process.env.ADMIN_EMAIL) {
-      console.log('Credenciales incorrectas para el administrador:', email);
-      return response.status(401).json({ error: 'Credenciales incorrectas para el administrador' });
-    }
-
-    // Verificar la contraseña del administrador
-    const adminPasswordMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
-    
-    if (adminPasswordMatch) {
-      console.log('Inicio de sesión exitoso para el administrador:', email);
-      return response.status(200).json({ isAdmin: true, redirectTo: '/admon' });
-    } else {
-      console.log('Credenciales incorrectas para el administrador:', email);
-      return response.status(401).json({ error: 'Credenciales incorrectas para el administrador' });
-    }
-  } catch (error) {
-    console.error('Error al procesar la solicitud:', error);
-    return response.status(500).json({ error: 'Error al procesar la solicitud' });
-  }
-});
 
 // Ruta de cierre de sesión
 usersRouter.post('/logout', verificarAutenticacion, async (req, res) => {
