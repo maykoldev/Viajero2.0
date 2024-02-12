@@ -30,28 +30,26 @@
           <div class="font-bold text-xl">
               <h1 class="uppercase">A dónde quieres viajar?</h1>
           </div>
-          <div class="w-full md:w-1/2 ">
-              <form action="" class="flex flex-col gap-4 justify-center  items-center md:flex-row">
-                  <div class="flex flex-col  rounded-xl gap-3 text-center py-2 w-[80%] md:w-1/2 md:border-y-0 md:border-l-0  md:px-6 md:py-1 hover:bg-blue-500 hover:opacity-30 justify-center font-bold">
+          <div class="w-full ">
+              <form action="" class="flex flex-col gap-4 justify-center  items-center md:flex-row ">
+                  <div class="flex flex-col  rounded-xl gap-3 text-center py-2 px-2 w-full md:mt-4  md:border-y-0 md:border-l-0  md:px-2 md:py-1 hover:bg-blue-500 hover:opacity-30 justify-center font-bold">
                       <label for="origen" class="uppercase">Origen</label>
                       <input type="text" id="origen" name="origen" class="h-11 w-[80%] m-auto rounded-lg md:w-full">
                       <ul id="sugerenciasOrigen" class="sugerencias"></ul>
                   </div>
 
-                  <div class="flex flex-col  rounded-xl gap-3 text-center py-2 w-[80%] md:w-1/2 md:border-y-0 md:border-l-0  md:px-6 md:py-1 hover:bg-blue-500 hover:opacity-30 justify-center font-bold">
+                  <div class="flex flex-col  rounded-xl gap-3 text-center py-2 w-full  md:border-y-0 md:border-l-0 md:mt-4  md:px-2 md:py-1 hover:bg-blue-500 hover:opacity-30 justify-center font-bold">
                       <label for="destino" class="uppercase">Destino</label>
-                      <input type="text" id="destino" name="destino" class="h-11 w-[80%] m-auto rounded-lg md:w-full">
+                      <input type="text" id="destino" name="destino" class="h-11 w-[80%] m-auto rounded-lg md:w-full ">
                       <ul id="sugerenciasDestino" class="sugerencias"></ul>
                   </div>
 
-                  <div class="flex flex-col  rounded-xl gap-3 text-center py-2 w-[80%] md:w-1/2 md:border-y-0 md:border-l-0  md:px-6 md:py-1 hover:bg-blue-500 hover:opacity-30 justify-center font-bold">
+                  <div class="flex flex-col  rounded-xl gap-4 text-center py-2 w-full  md:border-y-0 md:border-l-0  md:px-2  hover:bg-blue-500 hover:opacity-30 justify-center font-bold">
                       <label for="fecha" class="uppercase">Fecha de ida</label>
-                      
-                          <input type="date" id="fecha" name="fecha" class="h-11 w-[80%] m-auto rounded-lg md:w-full">
-                      
+                      <input type="date" id="fecha" name="fecha" class="h-11 w-[80%] m-auto rounded-lg md:w-full">
                   </div>
 
-                  <div class="flex justify-center items-center w-30 md:w-1/2 h-16 border-2 border-blue-300 rounded-full py-4 px-4 cursor-pointer hover:bg-blue-300 md:rounded-lg">
+                  <div class="flex justify-center items-center w-30 md:w-1/2 h-16 border-2 border-blue-300 rounded-full py-4 px-4 cursor-pointer hover:bg-blue-300 md:rounded-lg md:hidde">
                       <button id="buscar-ruta"><img src="/img/arrow.png" alt="" class="w-8 h-8 z-50"></button>
                   </div>
               </form>

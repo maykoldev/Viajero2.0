@@ -1,3 +1,5 @@
+const detallesRutasCache = {};
+
 document.addEventListener("DOMContentLoaded", async function () {
     const listadoR = document.getElementById('listadoR');
 
@@ -15,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function obtenerResultados(origen, destino, fecha) {
         try {
-            const response = await fetch(`/api/proveedores?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`);
+            const response = await fetch(`/api/proveedores?ruta.origen=${encodeURIComponent(origen)}&ruta.destino=${encodeURIComponent(destino)}&ruta.fecha=${encodeURIComponent(fecha)}`);
             if (response.ok) {
                 const proveedores = await response.json();
                 return proveedores;
@@ -28,32 +30,22 @@ document.addEventListener("DOMContentLoaded", async function () {
             return [];
         }
     }
-
-    async function mostrarResultados(resultados) {
-        // Limpiar resultados anteriores
-        listadoR.innerHTML = '';
-
-        // Mostrar los nuevos resultados
-        for (const proveedor of resultados) {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${proveedor.razonSocial || 'N/A'}</td>
-                <td>${await obtenerDetalleRuta(proveedor.ruta, 'origen') || 'N/A'}</td>
-                <td>${await obtenerDetalleRuta(proveedor.ruta, 'destino') || 'N/A'}</td>
-                <td>${proveedor.fecha || 'N/A'}</td>
-                <td>${await obtenerDetalleRuta(proveedor.ruta, 'precio') || 'N/A'}</td>
-                <td><button class="btnSeleccionar" data-proveedor-id="${proveedor.proveedorId}">Seleccionar</button></td>
-            `;
-            listadoR.appendChild(tr);
-        }
-    }
+    
+    
 
     async function obtenerDetalleRuta(nombreRuta, atributo) {
+    if (detallesRutasCache[nombreRuta]) {
+        // Si ya tenemos los detalles en caché, devolverlos directamente
+        return detallesRutasCache[nombreRuta][atributo];
+    } else {
+        // Si no están en caché, hacer la solicitud al servidor
         console.log(`Solicitando detalles para la ruta: ${nombreRuta}`);
         try {
             const response = await fetch(`/api/ruta-detalle?nombre=${encodeURIComponent(nombreRuta)}`);
             if (response.ok) {
                 const ruta = await response.json();
+                // Almacenar los detalles en caché para futuras referencias
+                detallesRutasCache[nombreRuta] = ruta;
                 return ruta[atributo];
             } else {
                 console.error(`Error al obtener detalle de ruta ${nombreRuta}.`);
@@ -62,6 +54,29 @@ document.addEventListener("DOMContentLoaded", async function () {
         } catch (error) {
             console.error(`Error de red al obtener detalle de ruta ${nombreRuta}:`, error);
             return null;
+        }
+    }
+}
+    
+   
+    async function mostrarResultados(resultados) {
+        // Limpiar resultados anteriores
+        listadoR.innerHTML = '';
+
+        // Mostrar los nuevos resultados
+        for (const proveedor of resultados) {
+            const tr = document.createElement('tr'); 
+            tr.classList.add('py-4')           
+            tr.innerHTML = `
+                <td class="w-[95px] flex justify-center my-2" ><img src="${proveedor.logo || '/uploads/logos'}" alt="Logo del proveedor" style="width: 80px;"></td>
+                <td>${proveedor.razonSocial || 'N/A'}</td>
+                <td>${await obtenerDetalleRuta(proveedor.ruta, 'origen') || 'N/A'}</td>
+                <td>${await obtenerDetalleRuta(proveedor.ruta, 'destino') || 'N/A'}</td>
+                <td>${proveedor.fecha || 'N/A'}</td>
+                <td>${await obtenerDetalleRuta(proveedor.ruta, 'precio') || 'N/A'}</td>
+                <td><button class="btnSeleccionar text-white p-2 hover:text-blue-900 hover:bg-blue-300 cursor-pointer bg-blue-700 rounded uppercase" data-proveedor-id="${proveedor.proveedorId}">Seleccionar</button></td>
+            `;
+            listadoR.appendChild(tr);
         }
     }
 

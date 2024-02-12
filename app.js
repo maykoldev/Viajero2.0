@@ -16,7 +16,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const detalleRutaRouter = require('./controllers/detalleRutaRouter');
 
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 (async () => {

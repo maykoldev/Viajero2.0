@@ -9,7 +9,7 @@ const proveedorSchema = new mongoose.Schema({
         default: uuidv4, // Generar un ID único usando uuidv4 como valor predeterminado
         unique: true,
     },
-    logo:Buffer,
+    logo:String,
     razonSocial: String,            // Razón Social del proveedor
     rif: String,                    // RIF del proveedor
     ruta:String,                   // Rutas de viaje ofrecidas por el proveedor

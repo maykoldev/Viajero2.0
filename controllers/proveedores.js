@@ -1,14 +1,24 @@
-const proveedoresRouter = require('express').Router();
+const express = require('express');
+const proveedoresRouter = express.Router();
 const Proveedor = require('../models/proveedor');
 const multer = require('multer');
-const storage = multer.memoryStorage();
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads/logos');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix);
+    }
+});
 
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 5 * 1024 * 1024, // Limitar el tamaño del archivo (en bytes) a 5 MB
+        fileSize: 5 * 1024 * 1024,
     },
-}).single('logo');
+}).single('logoEmpresa');
 
 proveedoresRouter.post('/', async (request, response) => {
     try {
@@ -21,17 +31,14 @@ proveedoresRouter.post('/', async (request, response) => {
             const { razonSocial, rif, ruta, fecha, telefono, correo, porcentajeGanancia } = request.body;
 
             try {
-                // Verificar si el RIF ya está registrado
                 const existingProveedor = await Proveedor.findOne({ rif });
 
                 if (existingProveedor) {
-                    // Si el RIF ya está registrado, devolver un error
                     return response.status(400).json({ error: 'El RIF ya está registrado para un proveedor' });
                 }
 
-                // Si el RIF no está registrado, crear un nuevo proveedor
                 const nuevoProveedor = new Proveedor({
-                    logo: request.file ? request.file.buffer : null,
+                    logo: request.file ? `/uploads/logos/${request.file.filename}` : null,
                     razonSocial,
                     rif,
                     ruta,
@@ -40,6 +47,10 @@ proveedoresRouter.post('/', async (request, response) => {
                     correo,
                     porcentajeGanancia,
                 });
+
+                if (request.file) {
+                    nuevoProveedor.logo = `/uploads/logos/${request.file.filename}`;
+                }
 
                 const proveedorGuardado = await nuevoProveedor.save();
 
@@ -55,52 +66,82 @@ proveedoresRouter.post('/', async (request, response) => {
     }
 });
 
-
-//endpoint para obtener los proveedores
 proveedoresRouter.get('/', async (req, res) => {
+    try {
+        const proveedores = await Proveedor.find();
+        res.status(200).json(proveedores);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los proveedores en la base de datos' });
+    }
+});
 
-  try{
-    const proveedores = await Proveedor.find();
+proveedoresRouter.get('/:id', async (req, res) => {
+    const id = req.params.id;
 
-    res.status(200).json(proveedores);
-  }catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener los proveedores en la base de datos' });
-  }
+    try {
+        const proveedor = await Proveedor.findById(id);
+
+        if (!proveedor) {
+            return res.status(404).json({ error: 'Proveedor no encontrado' });
+        }
+
+        res.json(proveedor);
+    } catch (error) {
+        console.error('Error al obtener detalles del proveedor:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
 });
 
 proveedoresRouter.put('/:id', async (req, res) => {
-  const id = req.params.id;
-  const { razonSocial, rif, ruta, fecha, telefono, correo, porcentajeGanancia } = req.body;
+    const id = req.params.id;
+    const { razonSocial, rif, ruta, fecha, telefono, correo, porcentajeGanancia } = req.body;
 
-  try {
-    const proveedor = await Proveedor.findById(id);
+    try {
+        const proveedor = await Proveedor.findById(id);
 
-    if (!proveedor) {
-        return res.status(404).json({ error: 'Proveedor no encontrado' });
+        if (!proveedor) {
+            return res.status(404).json({ error: 'Proveedor no encontrado' });
+        }
+
+        proveedor.razonSocial = razonSocial;
+        proveedor.rif = rif;
+        proveedor.ruta = ruta;
+        proveedor.fecha = fecha;
+        proveedor.telefono = telefono;
+        proveedor.correo = correo;
+        proveedor.porcentajeGanancia = porcentajeGanancia;
+
+        if (req.file) {
+            proveedor.logo = `/uploads/logos/${req.file.filename}`;
+        }
+
+        const proveedorActualizado = await proveedor.save();
+
+        res.json(proveedorActualizado);
+    } catch (error) {
+        console.error('Error al actualizar proveedor:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
     }
-
-    // Actualizar propiedades del proveedor
-    proveedor.razonSocial = razonSocial;
-    proveedor.rif = rif;
-    proveedor.ruta = ruta;
-    proveedor.fecha = fecha;
-    proveedor.telefono = telefono;
-    proveedor.correo = correo;
-    proveedor.porcentajeGanancia = porcentajeGanancia;
-
-    // Actualizar el logo solo si se proporciona un nuevo archivo
-    if (req.file) {
-        proveedor.logo = req.file.buffer;
-    }
-
-    const proveedorActualizado = await proveedor.save();
-
-    res.json(proveedorActualizado);
-  } catch (error) {
-    console.error('Error al actualizar proveedor:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
-  }
 });
-module.exports = proveedoresRouter;
 
+proveedoresRouter.delete('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const result = await Proveedor.deleteOne({ _id: id });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Proveedor no encontrado' });
+        }
+
+        res.json({ message: 'Proveedor eliminado correctamente' });
+    } catch (error) {
+        console.error('Error al eliminar proveedor:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+
+
+module.exports = proveedoresRouter;

@@ -91,15 +91,16 @@ const crearNavReg = () => {
 
 const crearNavAdm = () => {
     navAdmin.innerHTML = `
-    <div class="w-full container mx-auto flex flex-wrap items-center mt-0 pt-3 pb-3 ">
-				
-			<div class="w-1/2 pl-2 md:pl-0">
-				<a href="/admon" class="w-20">
-                    <img src="/img/LOGO2.png" alt="" class="w-24 py-4 mx-4">
+    <div class="w-full container mx-auto flex flex-col items-center mt-0 pt-3 pb-3 z-10">
+			
+        <div class="flex gap-48 items-center justify-center w-full">
+			<div class="w-auto pl-2 md:pl-0 float-start mr-auto">
+				<a href="/admon" class="w-auto">
+                    <img src="/img/LOGO2.png" alt="" class="w-32 py-4 mx-4 md:w-36">
                 </a>
             </div>
             
-			<div class="w-1/2 pr-0">
+			<div class="w-auto float-end pr-0 ml-auto">
 				<div class="flex relative  float-right">
 				
 				  <div class="relative text-sm text-blue-100">
@@ -126,12 +127,12 @@ const crearNavAdm = () => {
 				</div>
 
 			</div>
+        </div>
 
-
-			<div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden  mt-2 lg:mt-0 bg-blue-900 z-20" id="nav-content">
-				<ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0">
+			<div class="w-full flex-grow lg:flex lg:items-center lg:w-full hidden py-2 px-2 rounded  mt-2 lg:mt-0 bg-blue-700 z-20" id="nav-content">
+				<ul class="list-reset lg:flex flex-1 items-center px-4 md:px-0 uppercase font-bold">
 					<li class="mr-6 my-2 md:my-0 text-ellipsis">
-                        <a href="/admon" class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-blue-100 border-b-2 border-blue-400 hover:border-blue-400">
+                        <a href="/admon" class="block py-1 md:py-3 pl-1 align-middle text-blue-400 no-underline hover:text-white border-b-2 border-blue-400 hover:border-blue-400">
                             <i class="fas fa-home fa-fw mr-3 text-blue-400"></i><span class="pb-1 md:pb-0 text-sm">Home</span>
                         </a>
                     </li>

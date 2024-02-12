@@ -66,29 +66,31 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
   
     // Función que se ejecutará cuando se haga clic en el botón de búsqueda
-  async function buscarClickHandler(event) {
-    event.preventDefault();
-
-    const origen = origenInput.value;
-    const destino = destinoInput.value;
-    const fecha = fechaInput.value;
-
-    if (!origen || !destino || !fecha) {
-      alert('Todos los campos deben estar llenos');
-      return false;
+    async function buscarClickHandler(event) {
+      event.preventDefault();
+      
+      const origen = origenInput.value;
+      const destino = destinoInput.value;
+      const fecha = fechaInput.value;
+      
+      if (!origen || !destino || !fecha) {
+        alert('Todos los campos deben estar llenos');
+        return false;
+      }
+      
+      // Realizar una consulta a la base de datos para verificar la existencia de proveedores
+      const proveedoresDisponibles = await verificarExistenciaProveedor(origen, destino, fecha);
+      
+      if (proveedoresDisponibles.length > 0) {
+        // Redirigir al usuario a la vista de resultados
+        const url = `/res?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`;
+        window.location.href = url;
+      } else {
+        alert('No hay proveedores disponibles para la ruta y fecha seleccionadas.');
+      }
     }
-
-    // Realizar una consulta a la base de datos para verificar la existencia de proveedores
-    const proveedoresDisponibles = await verificarExistenciaProveedor(origen, destino, fecha);
-
-    if (proveedoresDisponibles.length > 0) {
-      // Redirigir al usuario a la vista de resultados
-      const url = `/res?origen=${encodeURIComponent(origen)}&destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`;
-      window.location.href = url;
-    } else {
-      alert('No hay proveedores disponibles para la ruta y fecha seleccionadas.');
-    }
-  }
+    
+    
 
   // Agregar el evento click para el botón de búsqueda
   buscarBtn.addEventListener('click', buscarClickHandler);
