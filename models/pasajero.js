@@ -24,7 +24,7 @@ pasajeroSchema.set('toJSON', {
         returnObject.id = returnObject._id.toString();
         delete returnObject._id;    // Eliminar la propiedad _id
         delete returnObject.__v;    // Eliminar la versión interna de mongoose (__v)
-        // No eliminar el porcentajeGanancia si deseas que se incluya en la respuesta
+        
     }
 });
 

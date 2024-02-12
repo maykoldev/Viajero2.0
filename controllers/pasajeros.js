@@ -45,7 +45,7 @@ pasajerosRouter.get('/:cedula', async (req, res) => {
         res.status(200).json(pasajero || {
             nombre: pasajero.nombre || '',
             apellido: pasajero.apellido || '',
-            fechaNacimiento: pasajero.fechaNacimiento ? pasajero.fechaNacimiento.toISOString() : '',
+            fechaNacimiento: pasajero.fechaNacimiento,
             genero: pasajero.genero || '',
             correo: pasajero.correo || '',
             telefono: pasajero.telefono || ''

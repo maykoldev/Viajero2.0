@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=ATSHn1lqFwcIbJYPIRKv4Zef76Qc3qZ84JBYzFyjSfwj6NdxoTZy4_XgSCjkhseppX3NE7mxeSs5aJNg&currency=USD" data-sdk-integration-source="button-factory"></script>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=ATSHn1lqFwcIbJYPIRKv4Zef76Qc3qZ84JBYzFyjSfwj6NdxoTZy4_XgSCjkhseppX3NE7mxeSs5aJNg&currency=USD"></script>
     <script>
         tailwind.config = {
           theme: {
@@ -391,7 +391,11 @@
             <h2 class="text-2xl font-bold mb-4">Selecciona tu método de pago</h2>
             
             
-            <div id="paypal-button-container"></div>
+            <div id="smart-button-container">
+                <div style="text-align: center;">
+                  <div id="paypal-button-container"></div>
+                </div>
+              </div>
            
     
             <div class="flex justify-end">
@@ -402,9 +406,17 @@
     </div>
 
     <div id="result-message"></div>
+
+
+    
     
     <script src="../componentes/nav.js"></script>
     <script  src="./index.js"></script>
+
+
+      
+      
+      
    
     
 </body>

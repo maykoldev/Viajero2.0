@@ -92,7 +92,8 @@ asientosSeleccionados.onclick = function() {
                   <input type="text" id="apellidos" name="apellidos" required class="bg-blue-100 outline rounded-md focus:outline-green-700 outline-2 block w-full md:w-auto mb-2">
       
                   <label for="fechaNacimiento" class="block mb-2">Fecha de nacimiento:</label>
-                  <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="h-auto bg-blue-100 outline rounded-md focus:outline-green-700 outline-2 block w-full md:w-auto mb-2">
+                  <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="h-auto bg-blue-100 outline rounded-md focus:outline-green-700 outline-2 block w-full md:w-auto mb-2" placeholder="YYYY-MM-DD">
+
       
                   <p class="block mb-2">Genero:</p>
                   <div class="block mb-2">
@@ -146,7 +147,6 @@ asientosSeleccionados.onclick = function() {
       const nombreValue = nombre.value;
       const apellidoValue = apellido.value;
       const fechaNacValue = fechaNac.value;
-      const fechaFormateada = new Date(fechaNacValue).toISOString().split('T')[0];
       const generoValue = generoM.checked ? 'Masculino' : 'Femenino';
       const correoValue = correo.value;
       const telefonoValue = telefono.value;
@@ -184,7 +184,7 @@ asientosSeleccionados.onclick = function() {
         cedula: cedulaValue,
         nombre: nombreValue,
         apellido: apellidoValue,
-        fechaNacimiento: fechaFormateada,
+        fechaNacimiento: fechaNacValue,
         genero: generoValue,
         correo: correoValue,
         telefono: telefonoValue,
@@ -317,7 +317,49 @@ asientosSeleccionados.onclick = function() {
         ventanaMetodosPago.classList.remove('hidden');
     }
 
+    function initPayPalButton() {
+      paypal.Buttons({
+        style: {
+          shape: 'rect',
+          color: 'gold',
+          layout: 'vertical',
+          label: 'pay',
+        },
+        createOrder: function(data, actions) {
+          return actions.order.create({
+            purchase_units: [{"description":"LA DESCRIPCION DE TU PRODUCTO","amount":{"currency_code":"USD","value":13}}]
+          });
+        },
+        onApprove: function(data, actions) {
+          return actions.order.capture().then(function(orderData) {
+            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+            // Crea un cuadro de diálogo personalizado
+            var thankYouMessage = "Gracias por comprar con nosotros. Su boleto será enviado a su correo electrónico.";
+            var dialog = document.createElement('div');
+            dialog.innerHTML = `
+              <p>${thankYouMessage}</p>
+              <button onclick="redirectToGmail()">Ir al correo electrónico</button>
+            `;
+            // Agrega el cuadro de diálogo al cuerpo del documento
+            document.body.appendChild(dialog);
+            // Redirige a la página de agradecimiento
+           
+          });
+        },
+        onError: function(err) {
+          console.log(err);
+        }
+      }).render('#paypal-button-container');
+    }
+    
+    function redirectToGmail() {
+      // Redirige al usuario a Gmail
+      window.location.href = 'https://mail.google.com/';
+    }
+  
+    initPayPalButton();
 
+    
   function showAlert(message) {
     alert(message);
   }
