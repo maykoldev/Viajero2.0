@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function obtenerResultados(origen, destino, fecha) {
         try {
-            const response = await fetch(`/api/proveedores?ruta.origen=${encodeURIComponent(origen)}&ruta.destino=${encodeURIComponent(destino)}&ruta.fecha=${encodeURIComponent(fecha)}`);
+            const response = await fetch(`/api/proveedores?ruta.origen=${encodeURIComponent(origen)}&ruta.destino=${encodeURIComponent(destino)}&fecha=${encodeURIComponent(fecha)}`);
+            console.log(response)
             if (response.ok) {
                 const proveedores = await response.json();
                 return proveedores;

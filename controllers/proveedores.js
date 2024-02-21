@@ -67,8 +67,25 @@ proveedoresRouter.post('/', async (request, response) => {
 });
 
 proveedoresRouter.get('/', async (req, res) => {
+    const { origen, destino, fecha } = req.query;
+
     try {
-        const proveedores = await Proveedor.find();
+        let query = {};
+
+        // Verificar si los parámetros se pasaron en la solicitud y agregarlos a la consulta
+        if (origen) {
+            query['ruta.origen'] = origen;
+        }
+        if (destino) {
+            query['ruta.destino'] = destino;
+        }
+        if (fecha) {
+            query.fecha = fecha;
+        }
+
+        // Filtrar los proveedores según la ruta de origen, destino y la fecha
+        const proveedores = await Proveedor.find(query);
+
         res.status(200).json(proveedores);
     } catch (error) {
         console.error(error);
@@ -76,22 +93,6 @@ proveedoresRouter.get('/', async (req, res) => {
     }
 });
 
-proveedoresRouter.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    try {
-        const proveedor = await Proveedor.findById(id);
-
-        if (!proveedor) {
-            return res.status(404).json({ error: 'Proveedor no encontrado' });
-        }
-
-        res.json(proveedor);
-    } catch (error) {
-        console.error('Error al obtener detalles del proveedor:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
 
 proveedoresRouter.put('/:id', async (req, res) => {
     const id = req.params.id;
