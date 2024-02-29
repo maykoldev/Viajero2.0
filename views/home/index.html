@@ -191,6 +191,19 @@
         </div>
     </footer>
     <script src="../componentes/nav.js"></script>
+    <script defer>
+      const fechaInput = document.getElementById('fecha');
+      const fechaActual = new Date().toISOString().split('T')[0];     
+      fechaInput.setAttribute('min', fechaActual);
+
+      fechaInput.addEventListener('change', function() {
+        const fechaSeleccionada = fechaInput.value;
+        if (fechaSeleccionada < fechaActual) {
+            fechaInput.value = fechaActual;
+        }
+    });
+
+  </script>
     <script defer src="./index.js"></script>
 </body>
 

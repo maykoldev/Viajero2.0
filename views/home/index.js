@@ -151,8 +151,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       tr.innerHTML = `
         <td>${proveedor.razonSocial}</td>
         <td>${proveedor.ruta}</td>
-        <td>${proveedor.fecha}</td>
-        <!-- Agrega más columnas según la información que desees mostrar -->
+                
       `;
       listadoR.appendChild(tr);
     });

@@ -1,9 +1,54 @@
 document.addEventListener('DOMContentLoaded', function () {
-const asientos = document.getElementsByClassName('asientos');
-const asientosSeleccionados = document.getElementById('asientos-seleccionados');
-const ventana = document.getElementById('ventanaEmergente');
-const bus = document.getElementById('bus');
-const atras = document.getElementById('atras');
+  const asientos = document.getElementsByClassName('asientos');
+  const asientosSeleccionados = document.getElementById('asientos-seleccionados');
+  const ventana = document.getElementById('ventanaEmergente');
+  const bus = document.getElementById('bus');
+  const atras = document.getElementById('atras');
+  const busContainer = document.querySelector('.bg-containerA');
+
+  // Definir el número de filas y columnas de asientos
+  const numRows = 12;
+  const numCols = 4;
+
+  // Crear un bucle para generar los asientos
+  for (let row = 0; row < numRows; row++) {
+    // Crear un div para representar cada fila de asientos
+    const seatRow = document.createElement('div');
+    seatRow.classList.add('flex', 'justify-center');
+
+    // Crear un bucle para generar los asientos en la fila actual
+    for (let col = 0; col < numCols; col++) {
+      // Crear un div para representar cada asiento
+      const seat = document.createElement('div');
+      seat.classList.add('asientos', 'bg-cover', 'w-12', 'h-12', 'leading-9', 'text-black', 'bg-no-repeat', 'font-semibold', 'rounded-[5px]', 'my-1', 'mx-1', 'cursor-pointer', 'bg-green-700');
+
+      // Crear un input para cada asiento
+      const input = document.createElement('input');
+      input.setAttribute('type', 'checkbox');
+      input.classList.add('w-12', 'h-12', 'hidden');
+
+      // Establecer un ID único para cada asiento
+      input.id = `${row + 1}${String.fromCharCode(97 + col)}`;
+
+      // Verificar si el asiento es 2c, 2d, 3c o 3d y asignar la clase correspondiente
+      if ((row === 1 && col === 2) || (row === 1 && col === 3) || (row === 2 && col === 2) || (row === 2 && col === 3)) {
+        seat.classList.remove('bg-green-700','cursor-pointer','bg-puestos')
+        seat.classList.add('bg-bano', 'bg-gray-700');
+        seat.style.pointerEvents = 'none';
+      } else {
+        seat.classList.add('bg-puestos');
+      }
+
+      // Agregar el input al div del asiento
+      seat.appendChild(input);
+
+      // Agregar el div del asiento a la fila
+      seatRow.appendChild(seat);
+    }
+
+    // Insertar la fila de asientos en el contenedor del autobús
+    busContainer.appendChild(seatRow);
+  }
 
 var nuevoFormulario;
 var contadorFormularios = 0;
@@ -18,24 +63,46 @@ console.log('Detalles de la empresa seleccionada:', empresaSeleccionada);
 sessionStorage.removeItem('empresaSeleccionada');
 
 Array.from(asientos).forEach(asiento => {
-  asiento.onclick = function() {
-    
+  asiento.addEventListener('click', function() {
     if (this.classList.contains('bg-orange-500')) {
-      
       this.classList.remove('bg-orange-500');
-      asientosSeleccionados.innerHTML = asientosSeleccionados.innerHTML.replace(this.id + ' ', '');
+      const asientoLabel = document.getElementById(this.id + '-label');
+      if (asientoLabel) {
+        asientosSeleccionados.removeChild(asientoLabel);
+      }
     } else {
-      
-      if (document.getElementsByClassName('bg-orange-500').length > 5) {//limite de asientos a seleccionar
+      if (document.querySelectorAll('.bg-orange-500').length >= 5) {
         alert('Solo puedes seleccionar un máximo de 5 asientos.');
         return;
       }
-     
-      this.classList.add('bg-orange-500','text-blue-700');
-      asientosSeleccionados.innerHTML += this.id + ' ';
+      this.classList.add('bg-orange-500', 'text-blue-700');
+      const asientoLabel = document.createElement('span');
+      asientoLabel.textContent = this.id;
+      asientoLabel.id = this.id + '-label';
+      asientosSeleccionados.appendChild(asientoLabel);
     }
-  };
+
+    // Actualizar el contenido del div asientosSeleccionados
+    actualizarAsientosSeleccionados();
+  });
 });
+
+// Función para actualizar el contenido del div asientosSeleccionados
+function actualizarAsientosSeleccionados() {
+  // Obtener todos los asientos seleccionados
+  const asientosSeleccionadosArray = document.querySelectorAll('.asientos.bg-orange-500');
+
+  // Limpiar el contenido anterior del div asientosSeleccionados
+  asientosSeleccionados.innerHTML = '';
+
+  // Agregar los IDs de los asientos seleccionados al div asientosSeleccionados
+  asientosSeleccionadosArray.forEach(asiento => {
+    const asientoLabel = document.createElement('span');
+    asientoLabel.textContent = asiento.id;
+    asientosSeleccionados.appendChild(asientoLabel);
+  });
+}
+
 
 // para deseleccionar los asientos
 asientosSeleccionados.onclick = function() {
@@ -153,7 +220,7 @@ asientosSeleccionados.onclick = function() {
       const telefonoRegex = /^[4][0-9]{9}$/;
       const emailRegex =
         /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
-        console.log('Fecha de nacimiento:', fechaNacValue);
+        
       if (
         !nombreValue ||
         !cedulaValue ||
@@ -325,9 +392,10 @@ asientosSeleccionados.onclick = function() {
           layout: 'vertical',
           label: 'pay',
         },
+    
         createOrder: function(data, actions) {
           return actions.order.create({
-            purchase_units: [{"description":"LA DESCRIPCION DE TU PRODUCTO","amount":{"currency_code":"USD","value":13}}]
+            purchase_units: [{"description":"BOLETO","amount":{"currency_code":"USD","value":13}}]
           });
         },
         onApprove: function(data, actions) {

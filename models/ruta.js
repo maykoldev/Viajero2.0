@@ -7,6 +7,8 @@ const rutaSchema = new mongoose.Schema({
     origen: String,
     destino: String,
     precio: String,
+    fecha: String,
+    hora:String,
 });
 
 

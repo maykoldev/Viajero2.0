@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Proveedores</title>
            <script src="https://cdn.tailwindcss.com"></script>
            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
            <link href="https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap" rel="stylesheet">
@@ -129,6 +129,19 @@
     </div>
 
     <script src="../componentes/nav.js"></script>
+    <script defer>
+        const fechaInput = document.getElementById('fechaP');
+        const fechaActual = new Date().toISOString().split('T')[0];     
+        fechaInput.setAttribute('min', fechaActual);
+  
+        fechaInput.addEventListener('change', function() {
+          const fechaSeleccionada = fechaInput.value;
+          if (fechaSeleccionada < fechaActual) {
+              fechaInput.value = fechaActual;
+          }
+      });
+  
+    </script>
     <script src="index.js"></script>
 </body>
 </html>

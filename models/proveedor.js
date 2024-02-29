@@ -13,7 +13,7 @@ const proveedorSchema = new mongoose.Schema({
     razonSocial: String,            // Razón Social del proveedor
     rif: String,                    // RIF del proveedor
     ruta:String,                   // Rutas de viaje ofrecidas por el proveedor
-    fecha:String,                  //fecha de salida por el proveedor
+    fecha:String,                   // fecha de salida del bus
     telefono: String,               // Teléfono del proveedor
     correo: String,                 // Correo electrónico del proveedor
     porcentajeGanancia: String,     // Porcentaje de ganancia del proveedor
